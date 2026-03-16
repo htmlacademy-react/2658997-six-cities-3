@@ -1,8 +1,12 @@
 import MainScreen from '../../pages/main-screen/main-screen.tsx';
 
-function App() {
+type AppCount = {
+  count: number;
+}
+
+function App({count}: AppCount): JSX.Element {
   return (
-    <MainScreen />
+    <MainScreen count={count}/>
   );
 }
 

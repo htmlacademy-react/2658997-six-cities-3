@@ -1,6 +1,10 @@
 import { CITIES } from '../../const';
 import CityCard from '../../components/city-card/city-card.tsx';
 
+type mainScreenCount = {
+  count: number;
+}
+
 function Location(city: string) {
   return (
     <li className="locations__item">
@@ -11,7 +15,7 @@ function Location(city: string) {
   );
 }
 
-function MainScreen() {
+function MainScreen({count}: mainScreenCount): JSX.Element {
   return (
     <main className="page__main page__main--index">
       <h1 className="visually-hidden">Cities</h1>
@@ -26,7 +30,7 @@ function MainScreen() {
         <div className="cities__places-container container">
           <section className="cities__places places">
             <h2 className="visually-hidden">Places</h2>
-            <b className="places__found">312 places to stay in Amsterdam</b>
+            <b className="places__found">{count} places to stay in Amsterdam</b>
             <form className="places__sorting" action="#" method="get">
               <span className="places__sorting-caption">Sort by</span>
               <span className="places__sorting-type" tabIndex={0}>

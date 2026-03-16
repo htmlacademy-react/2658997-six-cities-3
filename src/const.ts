@@ -6,5 +6,6 @@ const CITIES = [
   'Hamburg',
   'Dusseldorf'
 ];
+const OFFERS_COUNT: number = 312;
 
-export { CITIES };
+export { CITIES, OFFERS_COUNT };
