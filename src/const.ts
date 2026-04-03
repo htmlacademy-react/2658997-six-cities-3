@@ -1,5 +1,3 @@
-const OFFERS_COUNT: number = 312;
-
 const CITIES = [
   'Paris',
   'Cologne',
@@ -21,4 +19,4 @@ enum AppRoute {
   Offer = '/offer/:id',
 }
 
-export { CITIES, OFFERS_COUNT, AppRoute, AuthorizationStatus };
+export { CITIES, AppRoute, AuthorizationStatus };
