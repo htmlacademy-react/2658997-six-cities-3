@@ -1,16 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { CITIES } from '../../const';
-import CityCard from '../../components/city-card/city-card.tsx';
 import Header from '../../components/header/header.tsx';
 import Footer from '../../components/footer/footer.tsx';
 import Location from './components/location.tsx';
+import OffersList from '../../components/offers-list/offers-list.tsx';
+import {Offer} from '../../types/offer.ts';
 
-type mainScreenProps = {
-  count: number;
+type MainScreenProps = {
+  offers: Offer[];
 }
 
-const MainScreen = ({count}: mainScreenProps): React.ReactElement =>
-  (
+const MainScreen = ({offers}: MainScreenProps): React.ReactElement => {
+  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
+  const currentCityOffers = offers.filter(({city}) => city === 'Amsterdam');
+  const activeOffer = currentCityOffers.find(({id}) => id === activeOfferId) ?? null;
+
+  return (
     <>
       <Header />
       <main className="page__main page__main--index">
@@ -18,7 +23,9 @@ const MainScreen = ({count}: mainScreenProps): React.ReactElement =>
         <div className="tabs">
           <section className="locations container">
             <ul className="locations__list tabs__list">
-              {CITIES.map((cityItem) => Location(cityItem))}
+              {CITIES.map((cityItem) => (
+                <Location key={cityItem} city={cityItem} />
+              ))}
             </ul>
           </section>
         </div>
@@ -26,7 +33,7 @@ const MainScreen = ({count}: mainScreenProps): React.ReactElement =>
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{count} places to stay in Amsterdam</b>
+              <b className="places__found">{currentCityOffers.length} places to stay in Amsterdam</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -42,16 +49,18 @@ const MainScreen = ({count}: mainScreenProps): React.ReactElement =>
                   <li className="places__option" tabIndex={0}>Top rated first</li>
                 </ul>
               </form>
-              <div className="cities__places-list places__list tabs__content">
-                <CityCard />
-                <CityCard />
-                <CityCard />
-                <CityCard />
-                <CityCard />
-              </div>
+              <OffersList
+                offers={currentCityOffers}
+                listClassName="cities__places-list places__list tabs__content"
+                onActiveOfferChange={setActiveOfferId}
+              />
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"></section>
+              <section
+                className="cities__map map"
+                aria-label={activeOffer ? `Map for ${activeOffer.title}` : 'Map with offers'}
+              >
+              </section>
             </div>
           </div>
         </div>
@@ -59,5 +68,6 @@ const MainScreen = ({count}: mainScreenProps): React.ReactElement =>
       <Footer />
     </>
   );
+};
 
 export default MainScreen;

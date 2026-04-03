@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {Helmet} from 'react-helmet-async';
+import {AppRoute} from '../../const.ts';
 
 const LoginScreen = (): React.ReactElement =>
   (
@@ -12,7 +13,7 @@ const LoginScreen = (): React.ReactElement =>
         <div className="container">
           <div className="header__wrapper">
             <div className="header__left">
-              <Link className="header__logo-link" to="main.html">
+              <Link className="header__logo-link" to={AppRoute.Main}>
                 <img className="header__logo" src="/img/logo.svg" alt="6 cities logo" width="81" height="41"/>
               </Link>
             </div>
@@ -37,7 +38,7 @@ const LoginScreen = (): React.ReactElement =>
           </section>
           <section className="locations locations--login locations--current">
             <div className="locations__item">
-              <Link className="locations__item-link" to="#">
+              <Link className="locations__item-link" to={AppRoute.Main}>
                 <span>Amsterdam</span>
               </Link>
             </div>
