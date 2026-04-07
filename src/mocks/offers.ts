@@ -1,161 +1,238 @@
-import {Offer} from '../types/offer.ts';
+import {OfferDetails, OfferPreview} from '../types/offer.ts';
 
-const offers: Offer[] = [
+const amsterdamLocation = {
+  latitude: 52.37454,
+  longitude: 4.897976,
+  zoom: 12
+};
+
+const offers: OfferPreview[] = [
   {
-    id: 'amsterdam-canal-studio',
+    id: '6af6f711-c28d-4121-82cd-e0b462a27f00',
     title: 'Beautiful & luxurious studio at great location',
-    type: 'Apartment',
+    type: 'apartment',
     price: 120,
-    city: 'Amsterdam',
-    previewImage: '/img/apartment-01.jpg',
-    images: [
-      '/img/room.jpg',
-      '/img/apartment-01.jpg',
-      '/img/apartment-02.jpg',
-      '/img/apartment-03.jpg',
-      '/img/studio-01.jpg',
-      '/img/studio-photos.jpg'
-    ],
-    isPremium: true,
-    isFavorite: true,
-    rating: 4.8,
-    bedrooms: 3,
-    maxAdults: 4,
-    goods: [
-      'Wi-Fi',
-      'Washing machine',
-      'Towels',
-      'Heating',
-      'Coffee machine',
-      'Baby seat',
-      'Kitchen',
-      'Dishwasher',
-      'Cable TV',
-      'Fridge'
-    ],
-    host: {
-      name: 'Angelina',
-      avatarUrl: '/img/avatar-angelina.jpg',
-      isPro: true
+    city: {
+      name: 'Amsterdam',
+      location: amsterdamLocation
     },
-    description: [
-      'A quiet cozy apartment near the canal with lots of daylight and a calm inner courtyard.',
-      'You can walk to the city center in minutes, while the apartment itself stays peaceful in the evening.'
-    ]
-  },
-  {
-    id: 'amsterdam-wood-room',
-    title: 'Wood and stone place',
-    type: 'Room',
-    price: 80,
-    city: 'Amsterdam',
-    previewImage: '/img/room.jpg',
-    images: [
-      '/img/room.jpg',
-      '/img/apartment-02.jpg',
-      '/img/apartment-03.jpg',
-      '/img/studio-01.jpg',
-      '/img/apartment-01.jpg',
-      '/img/studio-photos.jpg'
-    ],
-    isPremium: false,
-    isFavorite: true,
-    rating: 4.0,
-    bedrooms: 1,
-    maxAdults: 2,
-    goods: [
-      'Wi-Fi',
-      'Breakfast',
-      'Heating',
-      'Towels',
-      'Fridge'
-    ],
-    host: {
-      name: 'Max',
-      avatarUrl: '/img/avatar-max.jpg',
-      isPro: false
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8
     },
-    description: [
-      'A compact room with warm wooden accents and a comfortable workspace.',
-      'Great for a short city break if you want to stay close to museums and cafes.'
-    ]
-  },
-  {
-    id: 'amsterdam-big-bed-apartment',
-    title: 'Nice, cozy, warm big bed apartment',
-    type: 'Apartment',
-    price: 180,
-    city: 'Amsterdam',
-    previewImage: '/img/apartment-03.jpg',
-    images: [
-      '/img/apartment-03.jpg',
-      '/img/apartment-01.jpg',
-      '/img/apartment-02.jpg',
-      '/img/room.jpg',
-      '/img/studio-01.jpg',
-      '/img/studio-photos.jpg'
-    ],
-    isPremium: true,
-    isFavorite: true,
-    rating: 5.0,
-    bedrooms: 2,
-    maxAdults: 3,
-    goods: [
-      'Wi-Fi',
-      'Kitchen',
-      'Dishwasher',
-      'Washing machine',
-      'Coffee machine',
-      'Cable TV'
-    ],
-    host: {
-      name: 'Olivia',
-      avatarUrl: '/img/avatar-angelina.jpg',
-      isPro: true
-    },
-    description: [
-      'A stylish apartment with a spacious bedroom and soft natural colors throughout the interior.',
-      'Ideal for guests who want more space without leaving the central districts of Amsterdam.'
-    ]
-  },
-  {
-    id: 'amsterdam-prinsengracht-view',
-    title: 'Canal View Prinsengracht',
-    type: 'Apartment',
-    price: 132,
-    city: 'Amsterdam',
-    previewImage: '/img/apartment-02.jpg',
-    images: [
-      '/img/apartment-02.jpg',
-      '/img/apartment-01.jpg',
-      '/img/room.jpg',
-      '/img/apartment-03.jpg',
-      '/img/studio-01.jpg',
-      '/img/studio-photos.jpg'
-    ],
-    isPremium: false,
     isFavorite: false,
-    rating: 4.2,
-    bedrooms: 2,
-    maxAdults: 4,
-    goods: [
-      'Wi-Fi',
-      'Kitchen',
-      'Heating',
-      'Towels',
-      'Coffee machine',
-      'Fridge'
-    ],
-    host: {
-      name: 'Sophie',
-      avatarUrl: '/img/avatar-max.jpg',
-      isPro: false
+    isPremium: false,
+    rating: 4,
+    previewImage: '/img/apartment-01.jpg'
+  },
+  {
+    id: '90d56abc-5f54-4f4d-8d3b-6a8a2f8d1c11',
+    title: 'Wood and stone place',
+    type: 'room',
+    price: 80,
+    city: {
+      name: 'Amsterdam',
+      location: amsterdamLocation
     },
-    description: [
-      'Bright apartment with canal views, tall windows and a fully equipped kitchen.',
-      'A good choice if you want to stay in a classic Amsterdam house with easy transport access.'
-    ]
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.85309666406198,
+      zoom: 8
+    },
+    isFavorite: true,
+    isPremium: false,
+    rating: 4.2,
+    previewImage: '/img/room.jpg'
+  },
+  {
+    id: 'f2ebf6bd-0cad-4f69-a8d0-41c0d72a7c6f',
+    title: 'Nice, cozy, warm big bed apartment',
+    type: 'apartment',
+    price: 180,
+    city: {
+      name: 'Amsterdam',
+      location: amsterdamLocation
+    },
+    location: {
+      latitude: 52.369553943508,
+      longitude: 4.85309666406198,
+      zoom: 8
+    },
+    isFavorite: true,
+    isPremium: true,
+    rating: 5,
+    previewImage: '/img/apartment-03.jpg'
+  },
+  {
+    id: '4a1a5f8a-f4d6-48a8-9f70-0f2e8e95bf3b',
+    title: 'Canal View Prinsengracht',
+    type: 'apartment',
+    price: 132,
+    city: {
+      name: 'Amsterdam',
+      location: amsterdamLocation
+    },
+    location: {
+      latitude: 52.3809553943508,
+      longitude: 4.939309666406198,
+      zoom: 8
+    },
+    isFavorite: false,
+    isPremium: true,
+    rating: 4.6,
+    previewImage: '/img/apartment-02.jpg'
   }
 ];
 
-export {offers};
+const detailedOffers: OfferDetails[] = [
+  {
+    id: '6af6f711-c28d-4121-82cd-e0b462a27f00',
+    title: 'Beautiful & luxurious studio at great location',
+    type: 'apartment',
+    price: 120,
+    city: {
+      name: 'Amsterdam',
+      location: amsterdamLocation
+    },
+    location: {
+      latitude: 52.35514938496378,
+      longitude: 4.673877537499948,
+      zoom: 8
+    },
+    isFavorite: false,
+    isPremium: false,
+    rating: 4,
+    description: 'A quiet cozy and picturesque apartment near the canal with soft daylight and a calm atmosphere.',
+    bedrooms: 3,
+    goods: [
+      'Heating',
+      'Wi-Fi',
+      'Kitchen',
+      'Coffee machine'
+    ],
+    host: {
+      name: 'Oliver Conner',
+      avatarUrl: '/img/avatar-angelina.jpg',
+      isPro: false
+    },
+    images: [
+      '/img/room.jpg',
+      '/img/apartment-01.jpg',
+      '/img/apartment-02.jpg'
+    ],
+    maxAdults: 4
+  },
+  {
+    id: '90d56abc-5f54-4f4d-8d3b-6a8a2f8d1c11',
+    title: 'Wood and stone place',
+    type: 'room',
+    price: 80,
+    city: {
+      name: 'Amsterdam',
+      location: amsterdamLocation
+    },
+    location: {
+      latitude: 52.3909553943508,
+      longitude: 4.85309666406198,
+      zoom: 8
+    },
+    isFavorite: true,
+    isPremium: false,
+    rating: 4.2,
+    description: 'A compact room with warm wooden accents, a comfortable bed and easy access to the city center.',
+    bedrooms: 1,
+    goods: [
+      'Heating',
+      'Towels',
+      'Wi-Fi'
+    ],
+    host: {
+      name: 'Max Cooper',
+      avatarUrl: '/img/avatar-max.jpg',
+      isPro: false
+    },
+    images: [
+      '/img/room.jpg',
+      '/img/apartment-02.jpg',
+      '/img/studio-01.jpg'
+    ],
+    maxAdults: 2
+  },
+  {
+    id: 'f2ebf6bd-0cad-4f69-a8d0-41c0d72a7c6f',
+    title: 'Nice, cozy, warm big bed apartment',
+    type: 'apartment',
+    price: 180,
+    city: {
+      name: 'Amsterdam',
+      location: amsterdamLocation
+    },
+    location: {
+      latitude: 52.369553943508,
+      longitude: 4.85309666406198,
+      zoom: 8
+    },
+    isFavorite: true,
+    isPremium: true,
+    rating: 5,
+    description: 'A spacious apartment with a large bedroom, quiet street views and enough room for a longer stay.',
+    bedrooms: 2,
+    goods: [
+      'Wi-Fi',
+      'Dishwasher',
+      'Washing machine',
+      'Cable TV'
+    ],
+    host: {
+      name: 'Olivia Stone',
+      avatarUrl: '/img/avatar-angelina.jpg',
+      isPro: true
+    },
+    images: [
+      '/img/apartment-03.jpg',
+      '/img/apartment-01.jpg',
+      '/img/studio-photos.jpg'
+    ],
+    maxAdults: 3
+  },
+  {
+    id: '4a1a5f8a-f4d6-48a8-9f70-0f2e8e95bf3b',
+    title: 'Canal View Prinsengracht',
+    type: 'apartment',
+    price: 132,
+    city: {
+      name: 'Amsterdam',
+      location: amsterdamLocation
+    },
+    location: {
+      latitude: 52.3809553943508,
+      longitude: 4.939309666406198,
+      zoom: 8
+    },
+    isFavorite: false,
+    isPremium: true,
+    rating: 4.6,
+    description: 'Bright apartment with canal views, tall windows and a clean, modern interior.',
+    bedrooms: 2,
+    goods: [
+      'Wi-Fi',
+      'Heating',
+      'Kitchen',
+      'Fridge'
+    ],
+    host: {
+      name: 'Sophie Brown',
+      avatarUrl: '/img/avatar-max.jpg',
+      isPro: true
+    },
+    images: [
+      '/img/apartment-02.jpg',
+      '/img/apartment-01.jpg',
+      '/img/room.jpg'
+    ],
+    maxAdults: 4
+  }
+];
+
+export {offers, detailedOffers};

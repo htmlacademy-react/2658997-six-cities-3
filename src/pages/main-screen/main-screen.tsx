@@ -1,19 +1,20 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { CITIES } from '../../const';
 import Header from '../../components/header/header.tsx';
 import Footer from '../../components/footer/footer.tsx';
 import Location from './components/location.tsx';
 import OffersList from '../../components/offers-list/offers-list.tsx';
-import {Offer} from '../../types/offer.ts';
+import { OfferPreview } from '../../types/offer.ts';
 
 type MainScreenProps = {
-  offers: Offer[];
-}
+  offers: OfferPreview[];
+};
 
-const MainScreen = ({offers}: MainScreenProps): React.ReactElement => {
-  const [activeOfferId, setActiveOfferId] = useState<string | null>(null);
-  const currentCityOffers = offers.filter(({city}) => city === 'Amsterdam');
-  const activeOffer = currentCityOffers.find(({id}) => id === activeOfferId) ?? null;
+const MainScreen = ({ offers }: MainScreenProps): React.ReactElement => {
+  const [activeOffer, setActiveOffer] = useState<OfferPreview | null>(null);
+  const currentCityOffers = offers.filter(
+    ({ city }) => city.name === 'Amsterdam',
+  );
 
   return (
     <>
@@ -33,7 +34,9 @@ const MainScreen = ({offers}: MainScreenProps): React.ReactElement => {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{currentCityOffers.length} places to stay in Amsterdam</b>
+              <b className="places__found">
+                {currentCityOffers.length} places to stay in Amsterdam
+              </b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -43,24 +46,38 @@ const MainScreen = ({offers}: MainScreenProps): React.ReactElement => {
                   </svg>
                 </span>
                 <ul className="places__options places__options--custom places__options--opened">
-                  <li className="places__option places__option--active" tabIndex={0}>Popular</li>
-                  <li className="places__option" tabIndex={0}>Price: low to high</li>
-                  <li className="places__option" tabIndex={0}>Price: high to low</li>
-                  <li className="places__option" tabIndex={0}>Top rated first</li>
+                  <li
+                    className="places__option places__option--active"
+                    tabIndex={0}
+                  >
+                    Popular
+                  </li>
+                  <li className="places__option" tabIndex={0}>
+                    Price: low to high
+                  </li>
+                  <li className="places__option" tabIndex={0}>
+                    Price: high to low
+                  </li>
+                  <li className="places__option" tabIndex={0}>
+                    Top rated first
+                  </li>
                 </ul>
               </form>
               <OffersList
                 offers={currentCityOffers}
                 listClassName="cities__places-list places__list tabs__content"
-                onActiveOfferChange={setActiveOfferId}
+                onActiveOfferChange={setActiveOffer}
               />
             </section>
             <div className="cities__right-section">
               <section
                 className="cities__map map"
-                aria-label={activeOffer ? `Map for ${activeOffer.title}` : 'Map with offers'}
-              >
-              </section>
+                aria-label={
+                  activeOffer
+                    ? `Map for ${activeOffer.title}`
+                    : 'Map with offers'
+                }
+              />
             </div>
           </div>
         </div>

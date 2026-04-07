@@ -4,21 +4,23 @@ import Header from '../../components/header/header.tsx';
 import Footer from '../../components/footer/footer.tsx';
 import {Helmet} from 'react-helmet-async';
 import OffersList from '../../components/offers-list/offers-list.tsx';
-import {Offer} from '../../types/offer.ts';
+import {OfferPreview} from '../../types/offer.ts';
 import {AppRoute} from '../../const.ts';
 
 type FavoritesScreenProps = {
-  offers: Offer[];
+  offers: OfferPreview[];
 }
 
 const FavoritesScreen = ({offers}: FavoritesScreenProps): React.ReactElement => {
   const favoriteOffers = offers.filter(({isFavorite}) => isFavorite);
-  const favoriteOffersByCity = favoriteOffers.reduce<Record<string, Offer[]>>((acc, offer) => {
-    if (!acc[offer.city]) {
-      acc[offer.city] = [];
+  const favoriteOffersByCity = favoriteOffers.reduce<Record<string, OfferPreview[]>>((acc, offer) => {
+    const cityName = offer.city.name;
+
+    if (!acc[cityName]) {
+      acc[cityName] = [];
     }
 
-    acc[offer.city].push(offer);
+    acc[cityName].push(offer);
     return acc;
   }, {});
 

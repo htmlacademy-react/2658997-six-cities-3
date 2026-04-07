@@ -1,16 +1,16 @@
 import React from 'react';
 import {generatePath, Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
-import {Offer} from '../../types/offer.ts';
+import {OfferPreview} from '../../types/offer.ts';
 
 type CityCardProps = {
-  offer: Offer;
+  offer: OfferPreview;
   cardClassName?: string;
   imageWrapperClassName?: string;
   infoClassName?: string;
   imageWidth?: number;
   imageHeight?: number;
-  onActiveOfferChange?: (offerId: string | null) => void;
+  onActiveOfferChange?: (offer: OfferPreview | null) => void;
 }
 
 const CityCard = ({
@@ -28,7 +28,7 @@ const CityCard = ({
   return (
     <article
       className={cardClassName}
-      onMouseEnter={() => onActiveOfferChange?.(offer.id)}
+      onMouseEnter={() => onActiveOfferChange?.(offer)}
       onMouseLeave={() => onActiveOfferChange?.(null)}
     >
       {offer.isPremium && (

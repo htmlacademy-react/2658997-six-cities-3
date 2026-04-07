@@ -8,13 +8,14 @@ import OfferScreen from '../../pages/offer-screen/offer-screen.tsx';
 import LoginScreen from '../../pages/login-screen/login-screen.tsx';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen.tsx';
 import PrivateRoute from '../private-route/private-route.tsx';
-import {Offer} from '../../types/offer.ts';
+import {OfferDetails, OfferPreview} from '../../types/offer.ts';
 
 type AppProps = {
-  offers: Offer[];
+  offers: OfferPreview[];
+  detailedOffers: OfferDetails[];
 }
 
-const App = ({offers}: AppProps): React.ReactElement =>
+const App = ({offers, detailedOffers}: AppProps): React.ReactElement =>
   (
     <HelmetProvider>
       <BrowserRouter>
@@ -39,7 +40,7 @@ const App = ({offers}: AppProps): React.ReactElement =>
           />
           <Route
             path={AppRoute.Offer}
-            element={<OfferScreen offers={offers} />}
+            element={<OfferScreen offers={detailedOffers} previewOffers={offers} />}
           />
           <Route
             path='*'
