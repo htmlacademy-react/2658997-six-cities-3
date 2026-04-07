@@ -2,16 +2,17 @@ import React from 'react';
 import {useParams} from 'react-router-dom';
 import {Helmet} from 'react-helmet-async';
 import Header from '../../components/header/header.tsx';
-import {Offer} from '../../types/offer.ts';
+import {OfferDetails, OfferPreview} from '../../types/offer.ts';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import OffersList from '../../components/offers-list/offers-list.tsx';
 import ReviewForm from '../../components/review-form/review-form.tsx';
 
 type OfferScreenProps = {
-  offers: Offer[];
+  offers: OfferDetails[];
+  previewOffers: OfferPreview[];
 }
 
-const OfferScreen = ({offers}: OfferScreenProps): React.ReactElement => {
+const OfferScreen = ({offers, previewOffers}: OfferScreenProps): React.ReactElement => {
   const {id} = useParams();
   const offer = offers.find((currentOffer) => currentOffer.id === id);
 
@@ -19,7 +20,7 @@ const OfferScreen = ({offers}: OfferScreenProps): React.ReactElement => {
     return <NotFoundScreen />;
   }
 
-  const nearbyOffers = offers.filter((currentOffer) => currentOffer.id !== offer.id).slice(0, 3);
+  const nearbyOffers = previewOffers.filter((currentOffer) => currentOffer.id !== offer.id).slice(0, 3);
   const ratingWidth = `${Math.round(offer.rating) * 20}%`;
 
   return (
@@ -105,11 +106,9 @@ const OfferScreen = ({offers}: OfferScreenProps): React.ReactElement => {
                   )}
                 </div>
                 <div className="offer__description">
-                  {offer.description.map((paragraph) => (
-                    <p className="offer__text" key={paragraph}>
-                      {paragraph}
-                    </p>
-                  ))}
+                  <p className="offer__text">
+                    {offer.description}
+                  </p>
                 </div>
               </div>
               <section className="offer__reviews reviews">

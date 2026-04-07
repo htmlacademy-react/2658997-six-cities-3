@@ -1,16 +1,16 @@
 import React from 'react';
 import CityCard from '../city-card/city-card.tsx';
-import {Offer} from '../../types/offer.ts';
+import {OfferPreview} from '../../types/offer.ts';
 
 type OffersListProps = {
-  offers: Offer[];
+  offers: OfferPreview[];
   listClassName: string;
   cardClassName?: string;
   imageWrapperClassName?: string;
   infoClassName?: string;
   imageWidth?: number;
   imageHeight?: number;
-  onActiveOfferChange?: (offerId: string | null) => void;
+  onActiveOfferChange?: (offer: OfferPreview | null) => void;
 };
 
 const OffersList = ({
