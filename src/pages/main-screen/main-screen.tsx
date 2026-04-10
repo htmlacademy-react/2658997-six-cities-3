@@ -16,6 +16,7 @@ const MainScreen = ({ offers }: MainScreenProps): React.ReactElement => {
   const currentCityOffers = offers.filter(
     ({ city }) => city.name === 'Amsterdam',
   );
+  const currentCity = currentCityOffers[0]?.city;
 
   return (
     <>
@@ -71,11 +72,13 @@ const MainScreen = ({ offers }: MainScreenProps): React.ReactElement => {
               />
             </section>
             <div className="cities__right-section">
-              <Map
-                city={currentCityOffers[0].city}
-                offers={currentCityOffers}
-                selectedOffer={activeOffer}
-              />
+              {currentCity && (
+                <Map
+                  city={currentCity}
+                  offers={currentCityOffers}
+                  selectedOffer={activeOffer}
+                />
+              )}
             </div>
           </div>
         </div>

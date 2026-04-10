@@ -1,7 +1,8 @@
 import {useEffect, useRef} from 'react';
-import {Icon, layerGroup, Map as LeafletMap, Marker, tileLayer} from 'leaflet';
+import {Icon, layerGroup, Marker} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {type City, type OfferPreview} from '../../types/offer.ts';
+import useMap from '../../hooks/use-map.ts';
 
 type MapProps = {
   city: City;
@@ -29,48 +30,14 @@ const Map = ({
   className = 'cities__map map'
 }: MapProps): JSX.Element => {
   const mapRef = useRef<HTMLDivElement | null>(null);
-  const mapInstanceRef = useRef<LeafletMap | null>(null);
-  const initialLocationRef = useRef(city.location);
+  const map = useMap(mapRef, city);
 
   useEffect(() => {
-    if (mapRef.current === null || mapInstanceRef.current !== null) {
+    if (map === null) {
       return;
     }
 
-    const {latitude, longitude, zoom} = initialLocationRef.current;
-    const map = new LeafletMap(mapRef.current, {
-      center: [latitude, longitude],
-      zoom
-    });
-
-    tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      {
-        attribution: '&copy; OpenStreetMap contributors'
-      }
-    ).addTo(map);
-
-    mapInstanceRef.current = map;
-
-    return () => {
-      mapInstanceRef.current?.remove();
-      mapInstanceRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    mapInstanceRef.current?.setView(
-      [city.location.latitude, city.location.longitude],
-      city.location.zoom
-    );
-  }, [city]);
-
-  useEffect(() => {
-    if (mapInstanceRef.current === null) {
-      return;
-    }
-
-    const markersLayer = layerGroup().addTo(mapInstanceRef.current);
+    const markersLayer = layerGroup().addTo(map);
 
     offers.forEach((offer) => {
       const marker = new Marker({
@@ -88,9 +55,9 @@ const Map = ({
     });
 
     return () => {
-      markersLayer.clearLayers();
+      markersLayer.remove();
     };
-  }, [offers, selectedOffer]);
+  }, [map, offers, selectedOffer]);
 
   return <div className={className} ref={mapRef} />;
 };
