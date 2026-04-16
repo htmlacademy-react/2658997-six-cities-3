@@ -1,12 +1,12 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {OfferPreview} from '../types/offer.ts';
-import {CITIES} from '../const.ts';
-import {fetchOffers} from './api-actions.ts';
+import {CITIES, AuthorizationStatus} from '../const.ts';
+import {fetchOffers, checkAuth, login, logout} from './api-actions.ts';
 
 type City = typeof CITIES[number];
 type SortType = 'Popular' | 'PriceLowToHigh' | 'PriceHighToLow' | 'TopRated';
 
-interface State {
+interface OffersState {
   city: City;
   offers: OfferPreview[];
   sortType: SortType;
@@ -14,7 +14,7 @@ interface State {
   error: string | null;
 }
 
-const initialState: State = {
+const offersInitialState: OffersState = {
   city: 'Paris',
   offers: [],
   sortType: 'Popular',
@@ -24,7 +24,7 @@ const initialState: State = {
 
 const offersSlice = createSlice({
   name: 'offers',
-  initialState,
+  initialState: offersInitialState,
   reducers: {
     changeCity: (state, action: {payload: City}) => {
       state.city = action.payload;
@@ -54,7 +54,62 @@ const offersSlice = createSlice({
   },
 });
 
+interface UserState {
+  authorizationStatus: AuthorizationStatus;
+  authToken: string | null;
+  email: string | null;
+  loading: boolean;
+}
+
+const userInitialState: UserState = {
+  authorizationStatus: AuthorizationStatus.NoAuth,
+  authToken: null,
+  email: null,
+  loading: false,
+};
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: userInitialState,
+  reducers: {
+    setAuthorizationStatus: (state, action: {payload: AuthorizationStatus}) => {
+      state.authorizationStatus = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(checkAuth.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(checkAuth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.authorizationStatus = AuthorizationStatus.Auth;
+        state.authToken = action.payload.token;
+        state.email = action.payload.email;
+      })
+      .addCase(checkAuth.rejected, (state) => {
+        state.loading = false;
+        state.authorizationStatus = AuthorizationStatus.NoAuth;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.authorizationStatus = AuthorizationStatus.Auth;
+        state.authToken = action.payload.token;
+        state.email = action.payload.email;
+      })
+      .addCase(login.rejected, (state) => {
+        state.authorizationStatus = AuthorizationStatus.NoAuth;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.authorizationStatus = AuthorizationStatus.NoAuth;
+        state.authToken = null;
+        state.email = null;
+      });
+  },
+});
+
 export const {changeCity, setOffers, setSortType} = offersSlice.actions;
-export {offersSlice};
+export const {setAuthorizationStatus} = userSlice.actions;
+export {offersSlice, userSlice};
 export const offersReducer = offersSlice.reducer;
-export type {State, City, SortType};
+export const userReducer = userSlice.reducer;
+export type {OffersState, UserState, City, SortType};

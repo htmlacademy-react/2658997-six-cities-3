@@ -1,4 +1,4 @@
-import axios, {AxiosInstance} from 'axios';
+import axios, {AxiosInstance, AxiosError} from 'axios';
 import {OfferPreview, OfferDetails} from '../types/offer.ts';
 import {Review} from '../types/review.ts';
 
@@ -18,12 +18,46 @@ export enum APIRoute {
   Logout = '/logout',
 }
 
+const TOKEN_KEY = 'six-cities-token';
+
+export function getToken(): string {
+  const token = localStorage.getItem(TOKEN_KEY);
+  return token ?? '';
+}
+
+export function saveToken(token: string): void {
+  localStorage.setItem(TOKEN_KEY, token);
+}
+
+export function dropToken(): void {
+  localStorage.removeItem(TOKEN_KEY);
+}
+
+api.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token) {
+    config.headers['X-Token'] = token;
+  }
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      dropToken();
+    }
+    throw error;
+  }
+);
+
 export const apiActions = {
   getOffers: () => api.get<OfferPreview[]>(APIRoute.Offers),
   getOfferDetails: (id: string) => api.get<OfferDetails>(`${APIRoute.Offers}/${id}`),
   getComments: (offerId: string) => api.get<Review[]>(`${APIRoute.Comments}/${offerId}`),
   getFavorites: () => api.get<OfferPreview[]>(APIRoute.Favorites),
-  login: (email: string, password: string) => api.post<{token: string}>(APIRoute.Login, {email, password}),
+  checkAuth: () => api.get<{token: string; email: string}>(APIRoute.Login),
+  login: (email: string, password: string) => api.post<{token: string; email: string}>(APIRoute.Login, {email, password}),
   logout: () => api.post(APIRoute.Logout),
   addComment: (offerId: string, comment: {comment: string; rating: number}) =>
     api.post<Review>(`${APIRoute.Comments}/${offerId}`, comment),

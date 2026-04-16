@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from '../../store/index.ts';
 import { changeCity, setSortType } from '../../store/action.ts';
-import { fetchOffers } from '../../store/api-actions.ts';
+import { fetchOffers, checkAuth } from '../../store/api-actions.ts';
 import type { SortType } from '../../store/reducer.ts';
 import Header from '../../components/header/header.tsx';
 import Footer from '../../components/footer/footer.tsx';
@@ -22,6 +22,7 @@ const MainScreen = (): React.ReactElement => {
   const [activeOffer, setActiveOffer] = useState<OfferPreview | null>(null);
 
   useEffect(() => {
+    dispatch(checkAuth());
     dispatch(fetchOffers());
   }, [dispatch]);
 
