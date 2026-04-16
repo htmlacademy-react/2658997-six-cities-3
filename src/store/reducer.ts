@@ -1,7 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {OfferPreview} from '../types/offer.ts';
+import {OfferPreview, OfferDetails} from '../types/offer.ts';
+import {Review} from '../types/review.ts';
 import {CITIES, AuthorizationStatus} from '../const.ts';
-import {fetchOffers, checkAuth, login, logout} from './api-actions.ts';
+import {fetchOffers, checkAuth, login, logout, fetchComments, addComment, fetchOfferDetails} from './api-actions.ts';
 
 type City = typeof CITIES[number];
 type SortType = 'Popular' | 'PriceLowToHigh' | 'PriceHighToLow' | 'TopRated';
@@ -12,6 +13,7 @@ interface OffersState {
   sortType: SortType;
   loading: boolean;
   error: string | null;
+  currentOfferDetails: OfferDetails | null;
 }
 
 const offersInitialState: OffersState = {
@@ -20,6 +22,7 @@ const offersInitialState: OffersState = {
   sortType: 'Popular',
   loading: false,
   error: null,
+  currentOfferDetails: null,
 };
 
 const offersSlice = createSlice({
@@ -50,6 +53,9 @@ const offersSlice = createSlice({
       .addCase(fetchOffers.rejected, (state) => {
         state.loading = false;
         state.error = 'Failed to load offers';
+      })
+      .addCase(fetchOfferDetails.fulfilled, (state, action) => {
+        state.currentOfferDetails = action.payload;
       });
   },
 });
@@ -107,9 +113,46 @@ const userSlice = createSlice({
   },
 });
 
+interface CommentsState {
+  comments: Review[];
+  loading: boolean;
+  error: string | null;
+}
+
+const commentsInitialState: CommentsState = {
+  comments: [],
+  loading: false,
+  error: null,
+};
+
+const commentsSlice = createSlice({
+  name: 'comments',
+  initialState: commentsInitialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchComments.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchComments.fulfilled, (state, action) => {
+        state.loading = false;
+        state.comments = action.payload;
+      })
+      .addCase(fetchComments.rejected, (state) => {
+        state.loading = false;
+        state.error = 'Failed to load comments';
+      })
+      .addCase(addComment.fulfilled, (state, action) => {
+        state.comments.push(action.payload);
+      });
+  },
+});
+
 export const {changeCity, setOffers, setSortType} = offersSlice.actions;
 export const {setAuthorizationStatus} = userSlice.actions;
-export {offersSlice, userSlice};
+export {offersSlice, userSlice, commentsSlice};
 export const offersReducer = offersSlice.reducer;
 export const userReducer = userSlice.reducer;
-export type {OffersState, UserState, City, SortType};
+export const commentsReducer = commentsSlice.reducer;
+export type {OffersState, UserState, CommentsState, City, SortType};
