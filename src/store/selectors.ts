@@ -19,6 +19,7 @@ const sortOffers = (offers: OfferPreview[], sortType: RootState['offers']['sortT
 export const selectOffersState = (state: RootState) => state.offers;
 export const selectUserState = (state: RootState) => state.user;
 export const selectCommentsState = (state: RootState) => state.comments;
+export const selectFavoritesState = (state: RootState) => state.favorites;
 
 export const selectCity = (state: RootState) => state.offers.city;
 export const selectOffers = (state: RootState) => state.offers.offers;
@@ -28,6 +29,7 @@ export const selectCurrentOfferDetails = (state: RootState) => state.offers.curr
 
 export const selectAuthorizationStatus = (state: RootState) => state.user.authorizationStatus;
 export const selectUserEmail = (state: RootState) => state.user.email;
+export const selectUserLoading = (state: RootState) => state.user.loading;
 export const selectIsAuthorized = createSelector(
   [selectAuthorizationStatus],
   (authorizationStatus) => authorizationStatus === AuthorizationStatus.Auth,
@@ -58,3 +60,25 @@ export const selectCurrentCityData = createSelector(
   [selectCurrentCityOffers],
   (offers) => offers[0]?.city ?? null,
 );
+
+export const selectFavorites = (state: RootState) => state.favorites.favorites;
+export const selectFavoritesLoading = (state: RootState) => state.favorites.loading;
+export const selectFavoritesCount = createSelector(
+  [selectFavorites],
+  (favorites) => favorites.length,
+);
+export const selectGroupedFavorites = createSelector([selectFavorites], (favorites) =>
+  favorites.reduce<Record<string, OfferPreview[]>>((groupedFavorites, offer) => {
+    const cityName = offer.city.name;
+
+    if (!groupedFavorites[cityName]) {
+      groupedFavorites[cityName] = [];
+    }
+
+    groupedFavorites[cityName].push(offer);
+
+    return groupedFavorites;
+  }, {}),
+);
+export const selectIsOfferUpdating = (state: RootState, offerId: string) =>
+  state.favorites.updatingOfferIds.includes(offerId);

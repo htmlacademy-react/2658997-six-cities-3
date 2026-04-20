@@ -45,6 +45,26 @@ export const fetchOfferDetails = createAsyncThunk<OfferDetails, string>(
   }
 );
 
+export const fetchFavorites = createAsyncThunk<OfferPreview[], undefined>(
+  'favorites/fetchFavorites',
+  async () => {
+    const response = await api.get<OfferPreview[]>(APIRoute.Favorites);
+    return response.data;
+  }
+);
+
+export const toggleFavoriteStatus = createAsyncThunk<
+  OfferDetails,
+  {offerId: string; status: 0 | 1}
+>(
+  'favorites/toggleFavoriteStatus',
+  async ({offerId, status}, {dispatch}) => {
+    const response = await api.post<OfferDetails>(`${APIRoute.Favorites}/${offerId}/${status}`);
+    await dispatch(fetchFavorites()).unwrap();
+    return response.data;
+  }
+);
+
 export const fetchComments = createAsyncThunk<Review[], string>(
   'comments/fetchComments',
   async (offerId) => {

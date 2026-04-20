@@ -5,6 +5,7 @@ import type { RootState, AppDispatch } from '../../store/index.ts';
 import { logout } from '../../store/api-actions.ts';
 import { AppRoute } from '../../const.ts';
 import {
+  selectFavoritesCount,
   selectIsAuthorized,
   selectUserEmail,
 } from '../../store/selectors.ts';
@@ -14,6 +15,7 @@ const Header = (): React.ReactElement => {
   const location = useLocation();
   const isAuth = useSelector((state: RootState) => selectIsAuthorized(state));
   const email = useSelector((state: RootState) => selectUserEmail(state));
+  const favoritesCount = useSelector((state: RootState) => selectFavoritesCount(state));
 
   const handleLogout = useCallback(() => {
     if (isAuth) {
@@ -55,6 +57,9 @@ const Header = (): React.ReactElement => {
                         <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                         <span className="header__user-name user__name">
                           {email}
+                        </span>
+                        <span className="header__favorite-count">
+                          {favoritesCount}
                         </span>
                       </Link>
                     </li>

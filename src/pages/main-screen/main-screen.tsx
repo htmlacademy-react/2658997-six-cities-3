@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from '../../store/index.ts';
 import { changeCity, setSortType } from '../../store/action.ts';
-import { fetchOffers, checkAuth } from '../../store/api-actions.ts';
+import { fetchOffers } from '../../store/api-actions.ts';
 import type { City, SortType } from '../../store/offers-slice.ts';
 import Header from '../../components/header/header.tsx';
 import Footer from '../../components/footer/footer.tsx';
@@ -13,6 +13,7 @@ import OffersList from '../../components/offers-list/offers-list.tsx';
 import Spinner from '../../components/spinner/spinner.tsx';
 import './main-screen.css';
 import { OfferPreview } from '../../types/offer.ts';
+import MainEmptyState from './components/main-empty-state.tsx';
 import {
   selectCity,
   selectCurrentCityData,
@@ -39,7 +40,6 @@ const MainScreen = (): React.ReactElement => {
   const [activeOffer, setActiveOffer] = useState<OfferPreview | null>(null);
 
   useEffect(() => {
-    dispatch(checkAuth());
     dispatch(fetchOffers());
   }, [dispatch]);
 
@@ -79,15 +79,10 @@ const MainScreen = (): React.ReactElement => {
             className={`cities__places-container${isEmpty ? ' cities__places-container--empty' : ''} container`}
           >
             {isEmpty ? (
-              <section className="cities__no-places">
-                <div className="cities__status-wrapper tabs__content">
-                  <b className="cities__status">No places to stay available</b>
-                  <p className="cities__status-description">
-                    We could not find any property available at the moment in{' '}
-                    {city}
-                  </p>
-                </div>
-              </section>
+              <>
+                <MainEmptyState city={city} />
+                <div className="cities__right-section"></div>
+              </>
             ) : (
               <>
                 <section className="cities__places places">

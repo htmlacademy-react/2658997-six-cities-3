@@ -8,6 +8,7 @@ import Header from '../../components/header/header.tsx';
 import { Offer } from '../../types/offer.ts';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import OffersList from '../../components/offers-list/offers-list.tsx';
+import FavoriteButton from '../../components/favorite-button/favorite-button.tsx';
 import ReviewForm from '../../components/review-form/review-form.tsx';
 import ReviewsList from '../../components/reviews-list/reviews-list.tsx';
 import Map from '../../components/map/map.tsx';
@@ -101,14 +102,15 @@ const OfferScreen = (): React.ReactElement => {
               )}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{offerDetails.title}</h1>
-                <button className="offer__bookmark-button button" type="button">
-                  <svg className="offer__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">
-                    {offerDetails.isFavorite ? 'In bookmarks' : 'To bookmarks'}
-                  </span>
-                </button>
+                <FavoriteButton
+                  offerId={offerDetails.id}
+                  isFavorite={offerDetails.isFavorite}
+                  buttonClassName="offer__bookmark-button"
+                  activeButtonClassName="offer__bookmark-button--active"
+                  iconClassName="offer__bookmark-icon"
+                  iconWidth={31}
+                  iconHeight={33}
+                />
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">

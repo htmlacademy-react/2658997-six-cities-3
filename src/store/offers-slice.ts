@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { CITIES } from '../const.ts';
 import type { OfferPreview, OfferDetails } from '../types/offer.ts';
-import { fetchOfferDetails, fetchOffers } from './api-actions.ts';
+import { fetchOfferDetails, fetchOffers, toggleFavoriteStatus } from './api-actions.ts';
 
 export type City = typeof CITIES[number];
 export type SortType =
@@ -62,6 +62,20 @@ const offersSlice = createSlice({
       })
       .addCase(fetchOfferDetails.fulfilled, (state, action) => {
         state.currentOfferDetails = action.payload;
+      })
+      .addCase(toggleFavoriteStatus.fulfilled, (state, action) => {
+        state.offers = state.offers.map((offer) =>
+          offer.id === action.payload.id
+            ? { ...offer, isFavorite: action.payload.isFavorite }
+            : offer,
+        );
+
+        if (state.currentOfferDetails?.id === action.payload.id) {
+          state.currentOfferDetails = {
+            ...state.currentOfferDetails,
+            isFavorite: action.payload.isFavorite,
+          };
+        }
       });
   },
 });

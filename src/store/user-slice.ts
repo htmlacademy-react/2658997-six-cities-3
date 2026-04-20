@@ -13,7 +13,7 @@ const initialState: UserState = {
   authorizationStatus: AuthorizationStatus.NoAuth,
   authToken: null,
   email: null,
-  loading: false,
+  loading: true,
 };
 
 const userSlice = createSlice({
@@ -42,15 +42,21 @@ const userSlice = createSlice({
         state.loading = false;
         state.authorizationStatus = AuthorizationStatus.NoAuth;
       })
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(login.fulfilled, (state, action) => {
+        state.loading = false;
         state.authorizationStatus = AuthorizationStatus.Auth;
         state.authToken = action.payload.token;
         state.email = action.payload.email;
       })
       .addCase(login.rejected, (state) => {
+        state.loading = false;
         state.authorizationStatus = AuthorizationStatus.NoAuth;
       })
       .addCase(logout.fulfilled, (state) => {
+        state.loading = false;
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.authToken = null;
         state.email = null;

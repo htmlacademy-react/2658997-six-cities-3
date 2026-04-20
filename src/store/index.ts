@@ -1,5 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
 import { commentsReducer } from './comments-slice.ts';
+import { favoritesReducer } from './favorites-slice.ts';
 import { offersReducer } from './offers-slice.ts';
 import { userReducer } from './user-slice.ts';
 
@@ -8,6 +9,7 @@ export const store = configureStore({
     offers: offersReducer,
     user: userReducer,
     comments: commentsReducer,
+    favorites: favoritesReducer,
   },
 });
 
