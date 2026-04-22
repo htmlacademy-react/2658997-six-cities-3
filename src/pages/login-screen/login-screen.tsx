@@ -42,7 +42,7 @@ const LoginScreen = (): React.ReactElement => {
   };
 
   return (
-    <>
+    <div className="page page--gray page--login">
       <Helmet>
         <title>6 cities: authorization</title>
       </Helmet>
@@ -110,7 +110,7 @@ const LoginScreen = (): React.ReactElement => {
           </section>
         </div>
       </main>
-    </>
+    </div>
   );
 };
 
