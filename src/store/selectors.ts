@@ -25,7 +25,14 @@ export const selectCity = (state: RootState) => state.offers.city;
 export const selectOffers = (state: RootState) => state.offers.offers;
 export const selectSortType = (state: RootState) => state.offers.sortType;
 export const selectOffersLoading = (state: RootState) => state.offers.loading;
+export const selectOffersError = (state: RootState) => state.offers.error;
 export const selectCurrentOfferDetails = (state: RootState) => state.offers.currentOfferDetails;
+export const selectCurrentOfferDetailsLoading = (state: RootState) =>
+  state.offers.currentOfferDetailsLoading;
+export const selectCurrentOfferDetailsErrorStatus = (state: RootState) =>
+  state.offers.currentOfferDetailsErrorStatus;
+export const selectNearbyOffers = (state: RootState) => state.offers.nearbyOffers;
+export const selectNearbyOffersError = (state: RootState) => state.offers.nearbyOffersError;
 
 export const selectAuthorizationStatus = (state: RootState) => state.user.authorizationStatus;
 export const selectUserEmail = (state: RootState) => state.user.email;
@@ -63,6 +70,7 @@ export const selectCurrentCityData = createSelector(
 
 export const selectFavorites = (state: RootState) => state.favorites.favorites;
 export const selectFavoritesLoading = (state: RootState) => state.favorites.loading;
+export const selectFavoritesError = (state: RootState) => state.favorites.error;
 export const selectFavoritesCount = createSelector(
   [selectFavorites],
   (favorites) => favorites.length,

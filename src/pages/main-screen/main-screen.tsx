@@ -11,6 +11,7 @@ import LocationsList from '../../components/locations-list/locations-list.tsx';
 import SortingList from '../../components/sorting-list/sorting-list.tsx';
 import OffersList from '../../components/offers-list/offers-list.tsx';
 import Spinner from '../../components/spinner/spinner.tsx';
+import ErrorMessage from '../../components/error-message/error-message.tsx';
 import './main-screen.css';
 import { OfferPreview } from '../../types/offer.ts';
 import MainEmptyState from './components/main-empty-state.tsx';
@@ -18,6 +19,7 @@ import {
   selectCity,
   selectCurrentCityData,
   selectCurrentCityOffers,
+  selectOffersError,
   selectOffersLoading,
   selectSortedCurrentCityOffers,
   selectSortType,
@@ -27,6 +29,7 @@ const MainScreen = (): React.ReactElement => {
   const dispatch = useDispatch<AppDispatch>();
   const city = useSelector((state: RootState) => selectCity(state));
   const loading = useSelector((state: RootState) => selectOffersLoading(state));
+  const offersError = useSelector((state: RootState) => selectOffersError(state));
   const sortType = useSelector((state: RootState) => selectSortType(state));
   const currentCityOffers = useSelector((state: RootState) =>
     selectCurrentCityOffers(state),
@@ -84,6 +87,7 @@ const MainScreen = (): React.ReactElement => {
           <div
             className={`cities__places-container${isEmpty ? ' cities__places-container--empty' : ''} container`}
           >
+            {offersError && <ErrorMessage message="Server is unavailable. Failed to load offers." />}
             {isEmpty ? (
               <>
                 <MainEmptyState city={city} />

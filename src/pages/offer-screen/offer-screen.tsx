@@ -1,9 +1,13 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import type { RootState, AppDispatch } from '../../store/index.ts';
-import { fetchOfferDetails, fetchComments } from '../../store/api-actions.ts';
+import {
+  fetchNearbyOffers,
+  fetchOfferDetails,
+  fetchComments,
+} from '../../store/api-actions.ts';
 import Header from '../../components/header/header.tsx';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import OffersList from '../../components/offers-list/offers-list.tsx';
@@ -12,19 +16,39 @@ import ReviewForm from '../../components/review-form/review-form.tsx';
 import ReviewsList from '../../components/reviews-list/reviews-list.tsx';
 import Map from '../../components/map/map.tsx';
 import Spinner from '../../components/spinner/spinner.tsx';
+import ErrorMessage from '../../components/error-message/error-message.tsx';
 import {
   selectCommentsCount,
   selectCurrentOfferDetails,
-  selectOffers,
+  selectCurrentOfferDetailsErrorStatus,
+  selectCurrentOfferDetailsLoading,
+  selectNearbyOffers,
+  selectNearbyOffersError,
   selectSortedComments,
 } from '../../store/selectors.ts';
+
+const OFFER_TYPE_LABELS: Record<string, string> = {
+  apartment: 'Apartment',
+  room: 'Room',
+  house: 'House',
+  hotel: 'Hotel',
+};
 
 const OfferScreen = (): React.ReactElement => {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-  const offers = useSelector((state: RootState) => selectOffers(state));
   const currentOfferDetails = useSelector((state: RootState) =>
     selectCurrentOfferDetails(state),
+  );
+  const currentOfferDetailsLoading = useSelector((state: RootState) =>
+    selectCurrentOfferDetailsLoading(state),
+  );
+  const currentOfferDetailsErrorStatus = useSelector((state: RootState) =>
+    selectCurrentOfferDetailsErrorStatus(state),
+  );
+  const nearbyOffers = useSelector((state: RootState) => selectNearbyOffers(state));
+  const nearbyOffersError = useSelector((state: RootState) =>
+    selectNearbyOffersError(state),
   );
   const comments = useSelector((state: RootState) =>
     selectSortedComments(state),
@@ -32,40 +56,46 @@ const OfferScreen = (): React.ReactElement => {
   const commentsCount = useSelector((state: RootState) =>
     selectCommentsCount(state),
   );
+  const commentsError = useSelector((state: RootState) => state.comments.error);
 
   useEffect(() => {
     if (id) {
       dispatch(fetchOfferDetails(id));
+      dispatch(fetchNearbyOffers(id));
       dispatch(fetchComments(id));
     }
   }, [dispatch, id]);
 
   const offerDetails = currentOfferDetails;
-
-  const nearbyOffers = useMemo(() => {
-    if (!offerDetails) {
-      return [];
-    }
-
-    return offers
-      .filter(
-        (offer) =>
-          offer.id !== id && offer.city.name === offerDetails.city.name,
-      )
-      .slice(0, 3);
-  }, [offerDetails, offers, id]);
-
   const mapOffers = offerDetails ? [offerDetails, ...nearbyOffers] : [];
 
   if (!id) {
     return <NotFoundScreen />;
   }
 
-  if (!offerDetails) {
+  if (currentOfferDetailsErrorStatus === 404) {
+    return <NotFoundScreen />;
+  }
+
+  if (currentOfferDetailsLoading || (!offerDetails && currentOfferDetailsErrorStatus === null)) {
     return <Spinner />;
   }
 
+  if (!offerDetails) {
+    return (
+      <div className="page">
+        <Header />
+        <main className="page__main page__main--offer">
+          <div className="container">
+            <ErrorMessage message="Server is unavailable. Failed to load offer details." />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   const ratingWidth = `${Math.round(offerDetails.rating) * 20}%`;
+  const offerTypeLabel = OFFER_TYPE_LABELS[offerDetails.type] ?? offerDetails.type;
 
   return (
     <div className="page">
@@ -90,6 +120,9 @@ const OfferScreen = (): React.ReactElement => {
           </div>
           <div className="offer__container container">
             <div className="offer__wrapper">
+              {(nearbyOffersError || commentsError) && (
+                <ErrorMessage message="Some offer data could not be loaded. Please try again later." />
+              )}
               {offerDetails.isPremium && (
                 <div className="offer__mark">
                   <span>Premium</span>
@@ -118,7 +151,7 @@ const OfferScreen = (): React.ReactElement => {
               </div>
               <ul className="offer__features">
                 <li className="offer__feature offer__feature--entire">
-                  {offerDetails.type}
+                  {offerTypeLabel}
                 </li>
                 <li className="offer__feature offer__feature--bedrooms">
                   {offerDetails.bedrooms}{' '}

@@ -23,7 +23,6 @@ const commentsSlice = createSlice({
       .addCase(fetchComments.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.comments = [];
       })
       .addCase(fetchComments.fulfilled, (state, action) => {
         state.loading = false;
@@ -33,8 +32,11 @@ const commentsSlice = createSlice({
         state.loading = false;
         state.error = 'Failed to load comments';
       })
-      .addCase(addComment.fulfilled, (state, action) => {
-        state.comments.push(action.payload);
+      .addCase(addComment.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(addComment.rejected, (state) => {
+        state.error = 'Failed to post comment';
       });
   },
 });

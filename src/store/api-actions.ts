@@ -1,4 +1,5 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import {OfferPreview, OfferDetails} from '../types/offer.ts';
 import {Review} from '../types/review.ts';
 import {api, APIRoute, saveToken, dropToken} from './api.ts';
@@ -42,10 +43,29 @@ export const logout = createAsyncThunk<void, undefined>(
   }
 );
 
-export const fetchOfferDetails = createAsyncThunk<OfferDetails, string>(
+export const fetchOfferDetails = createAsyncThunk<
+  OfferDetails,
+  string,
+  { rejectValue: number | null }
+>(
   'offers/fetchOfferDetails',
+  async (offerId, { rejectWithValue }) => {
+    try {
+      const response = await api.get<OfferDetails>(`${APIRoute.Offers}/${offerId}`);
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return rejectWithValue(axiosError.response?.status ?? null);
+    }
+  }
+);
+
+export const fetchNearbyOffers = createAsyncThunk<OfferPreview[], string>(
+  'offers/fetchNearbyOffers',
   async (offerId) => {
-    const response = await api.get<OfferDetails>(`${APIRoute.Offers}/${offerId}`);
+    const response = await api.get<OfferPreview[]>(
+      `${APIRoute.Offers}/${offerId}/nearby`
+    );
     return response.data;
   }
 );
@@ -78,10 +98,10 @@ export const fetchComments = createAsyncThunk<Review[], string>(
   }
 );
 
-export const addComment = createAsyncThunk<Review, {offerId: string; comment: string; rating: number}>(
+export const addComment = createAsyncThunk<void, {offerId: string; comment: string; rating: number}>(
   'comments/addComment',
-  async ({offerId, comment, rating}) => {
-    const response = await api.post<Review>(`${APIRoute.Comments}/${offerId}`, {comment, rating});
-    return response.data;
+  async ({offerId, comment, rating}, { dispatch }) => {
+    await api.post<Review>(`${APIRoute.Comments}/${offerId}`, {comment, rating});
+    await dispatch(fetchComments(offerId)).unwrap();
   }
 );

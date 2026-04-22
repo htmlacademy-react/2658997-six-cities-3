@@ -5,6 +5,7 @@ import Header from '../../components/header/header.tsx';
 import Footer from '../../components/footer/footer.tsx';
 import { Helmet } from 'react-helmet-async';
 import OffersList from '../../components/offers-list/offers-list.tsx';
+import ErrorMessage from '../../components/error-message/error-message.tsx';
 import { AppRoute } from '../../const.ts';
 import type { RootState, AppDispatch } from '../../store/index.ts';
 import { fetchFavorites } from '../../store/api-actions.ts';
@@ -12,6 +13,7 @@ import { changeCity } from '../../store/action.ts';
 import type { City } from '../../store/offers-slice.ts';
 import {
   selectFavoritesCount,
+  selectFavoritesError,
   selectGroupedFavorites,
 } from '../../store/selectors.ts';
 import FavoritesEmptyState from './components/favorites-empty-state.tsx';
@@ -23,6 +25,9 @@ const FavoritesScreen = (): React.ReactElement => {
   );
   const favoritesCount = useSelector((state: RootState) =>
     selectFavoritesCount(state),
+  );
+  const favoritesError = useSelector((state: RootState) =>
+    selectFavoritesError(state),
   );
 
   useEffect(() => {
@@ -45,6 +50,9 @@ const FavoritesScreen = (): React.ReactElement => {
         className={`page__main page__main--favorites${isEmpty ? ' page__main--favorites-empty' : ''}`}
       >
         <div className="page__favorites-container container">
+          {favoritesError && (
+            <ErrorMessage message="Server is unavailable. Failed to load favorites." />
+          )}
           {isEmpty ? (
             <FavoritesEmptyState />
           ) : (

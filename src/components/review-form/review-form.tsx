@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import type { RootState, AppDispatch } from '../../store/index.ts';
 import { addComment } from '../../store/api-actions.ts';
 import { AppRoute, AuthorizationStatus } from '../../const.ts';
+import ErrorMessage from '../error-message/error-message.tsx';
 
 const MIN_REVIEW_LENGTH = 50;
 const MAX_REVIEW_LENGTH = 300;
@@ -21,12 +22,15 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleReviewChange = (evt: ChangeEvent<HTMLTextAreaElement>) => {
+    setSubmitError(null);
     setReview(evt.target.value);
   };
 
   const handleRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
+    setSubmitError(null);
     setRating(Number(evt.target.value));
   };
 
@@ -47,6 +51,7 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
     }
 
     setIsSubmitting(true);
+    setSubmitError(null);
     dispatch(addComment({ offerId, comment: review, rating }))
       .unwrap()
       .then(() => {
@@ -56,6 +61,7 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
       })
       .catch(() => {
         setIsSubmitting(false);
+        setSubmitError('Failed to post comment. Please try again.');
       });
   };
 
@@ -79,6 +85,7 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
+      {submitError && <ErrorMessage message={submitError} />}
       <div className="reviews__rating-form form__rating">
         {[5, 4, 3, 2, 1].map((value) => (
           <React.Fragment key={value}>
