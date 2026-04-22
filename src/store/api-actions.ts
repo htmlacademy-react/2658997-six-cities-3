@@ -32,8 +32,13 @@ export const login = createAsyncThunk<{token: string; email: string}, {email: st
 export const logout = createAsyncThunk<void, undefined>(
   'user/logout',
   async () => {
-    await api.post(APIRoute.Logout);
-    dropToken();
+    try {
+      await api.post(APIRoute.Logout);
+    } catch {
+      // no-op: local session must be terminated even if server logout fails
+    } finally {
+      dropToken();
+    }
   }
 );
 
@@ -41,6 +46,26 @@ export const fetchOfferDetails = createAsyncThunk<OfferDetails, string>(
   'offers/fetchOfferDetails',
   async (offerId) => {
     const response = await api.get<OfferDetails>(`${APIRoute.Offers}/${offerId}`);
+    return response.data;
+  }
+);
+
+export const fetchFavorites = createAsyncThunk<OfferPreview[], undefined>(
+  'favorites/fetchFavorites',
+  async () => {
+    const response = await api.get<OfferPreview[]>(APIRoute.Favorites);
+    return response.data;
+  }
+);
+
+export const toggleFavoriteStatus = createAsyncThunk<
+  OfferDetails,
+  {offerId: string; status: 0 | 1}
+>(
+  'favorites/toggleFavoriteStatus',
+  async ({offerId, status}, {dispatch}) => {
+    const response = await api.post<OfferDetails>(`${APIRoute.Favorites}/${offerId}/${status}`);
+    await dispatch(fetchFavorites()).unwrap();
     return response.data;
   }
 );

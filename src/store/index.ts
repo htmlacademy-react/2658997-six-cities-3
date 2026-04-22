@@ -1,11 +1,15 @@
 import {configureStore} from '@reduxjs/toolkit';
-import {offersReducer, userReducer, commentsReducer} from './reducer.ts';
+import { commentsReducer } from './comments-slice.ts';
+import { favoritesReducer } from './favorites-slice.ts';
+import { offersReducer } from './offers-slice.ts';
+import { userReducer } from './user-slice.ts';
 
 export const store = configureStore({
   reducer: {
     offers: offersReducer,
     user: userReducer,
     comments: commentsReducer,
+    favorites: favoritesReducer,
   },
 });
 

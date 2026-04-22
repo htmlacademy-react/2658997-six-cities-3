@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { AppRoute } from '../../const.ts';
-import { login } from '../../store/api-actions.ts';
+import { fetchFavorites, login } from '../../store/api-actions.ts';
 import type { AppDispatch } from '../../store/index.ts';
 
 const LoginScreen = (): React.ReactElement => {
@@ -32,6 +32,7 @@ const LoginScreen = (): React.ReactElement => {
       dispatch(login({ email, password }))
         .unwrap()
         .then(() => {
+          dispatch(fetchFavorites());
           navigate(AppRoute.Main);
         })
         .catch(() => {
@@ -41,7 +42,7 @@ const LoginScreen = (): React.ReactElement => {
   };
 
   return (
-    <>
+    <div className="page page--gray page--login">
       <Helmet>
         <title>6 cities: authorization</title>
       </Helmet>
@@ -109,7 +110,7 @@ const LoginScreen = (): React.ReactElement => {
           </section>
         </div>
       </main>
-    </>
+    </div>
   );
 };
 

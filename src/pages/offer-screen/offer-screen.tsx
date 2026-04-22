@@ -1,26 +1,37 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import type { RootState, AppDispatch } from '../../store/index.ts';
 import { fetchOfferDetails, fetchComments } from '../../store/api-actions.ts';
 import Header from '../../components/header/header.tsx';
-import { Offer } from '../../types/offer.ts';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import OffersList from '../../components/offers-list/offers-list.tsx';
+import FavoriteButton from '../../components/favorite-button/favorite-button.tsx';
 import ReviewForm from '../../components/review-form/review-form.tsx';
 import ReviewsList from '../../components/reviews-list/reviews-list.tsx';
 import Map from '../../components/map/map.tsx';
 import Spinner from '../../components/spinner/spinner.tsx';
+import {
+  selectCommentsCount,
+  selectCurrentOfferDetails,
+  selectOffers,
+  selectSortedComments,
+} from '../../store/selectors.ts';
 
 const OfferScreen = (): React.ReactElement => {
   const { id } = useParams();
   const dispatch = useDispatch<AppDispatch>();
-  const { offers, currentOfferDetails } = useSelector(
-    (state: RootState) => state.offers,
+  const offers = useSelector((state: RootState) => selectOffers(state));
+  const currentOfferDetails = useSelector((state: RootState) =>
+    selectCurrentOfferDetails(state),
   );
-  const { comments } = useSelector((state: RootState) => state.comments);
-  const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
+  const comments = useSelector((state: RootState) =>
+    selectSortedComments(state),
+  );
+  const commentsCount = useSelector((state: RootState) =>
+    selectCommentsCount(state),
+  );
 
   useEffect(() => {
     if (id) {
@@ -31,14 +42,20 @@ const OfferScreen = (): React.ReactElement => {
 
   const offerDetails = currentOfferDetails;
 
-  const nearbyOffers = useMemo(
-    () => offers.filter((o) => o.id !== id).slice(0, 3),
-    [offers, id],
-  );
+  const nearbyOffers = useMemo(() => {
+    if (!offerDetails) {
+      return [];
+    }
 
-  const mapOffers: Offer[] = offerDetails
-    ? [offerDetails, ...nearbyOffers]
-    : [];
+    return offers
+      .filter(
+        (offer) =>
+          offer.id !== id && offer.city.name === offerDetails.city.name,
+      )
+      .slice(0, 3);
+  }, [offerDetails, offers, id]);
+
+  const mapOffers = offerDetails ? [offerDetails, ...nearbyOffers] : [];
 
   if (!id) {
     return <NotFoundScreen />;
@@ -51,7 +68,7 @@ const OfferScreen = (): React.ReactElement => {
   const ratingWidth = `${Math.round(offerDetails.rating) * 20}%`;
 
   return (
-    <>
+    <div className="page">
       <Helmet>
         <title>6 cities: {offerDetails.title}</title>
       </Helmet>
@@ -80,14 +97,15 @@ const OfferScreen = (): React.ReactElement => {
               )}
               <div className="offer__name-wrapper">
                 <h1 className="offer__name">{offerDetails.title}</h1>
-                <button className="offer__bookmark-button button" type="button">
-                  <svg className="offer__bookmark-icon" width="31" height="33">
-                    <use xlinkHref="#icon-bookmark"></use>
-                  </svg>
-                  <span className="visually-hidden">
-                    {offerDetails.isFavorite ? 'In bookmarks' : 'To bookmarks'}
-                  </span>
-                </button>
+                <FavoriteButton
+                  offerId={offerDetails.id}
+                  isFavorite={offerDetails.isFavorite}
+                  buttonClassName="offer__bookmark-button"
+                  activeButtonClassName="offer__bookmark-button--active"
+                  iconClassName="offer__bookmark-icon"
+                  iconWidth={31}
+                  iconHeight={33}
+                />
               </div>
               <div className="offer__rating rating">
                 <div className="offer__stars rating__stars">
@@ -151,7 +169,7 @@ const OfferScreen = (): React.ReactElement => {
                 </div>
               </div>
               <section className="offer__reviews reviews">
-                <ReviewsList reviews={comments} />
+                <ReviewsList reviews={comments} reviewsCount={commentsCount} />
                 <ReviewForm offerId={id} />
               </section>
             </div>
@@ -159,7 +177,7 @@ const OfferScreen = (): React.ReactElement => {
           <Map
             city={offerDetails.city}
             offers={mapOffers}
-            selectedOffer={activeOffer ?? offerDetails}
+            selectedOffer={offerDetails}
             className="offer__map map"
           />
         </section>
@@ -173,13 +191,11 @@ const OfferScreen = (): React.ReactElement => {
               listClassName="near-places__list places__list"
               cardClassName="near-places__card place-card"
               imageWrapperClassName="near-places__image-wrapper place-card__image-wrapper"
-              onActiveOfferChange={(currentOffer) =>
-                setActiveOffer(currentOffer ?? offerDetails)}
             />
           </section>
         </div>
       </main>
-    </>
+    </div>
   );
 };
 

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { memo, useCallback } from 'react';
 import {generatePath, Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
 import {OfferPreview} from '../../types/offer.ts';
+import FavoriteButton from '../favorite-button/favorite-button.tsx';
 
 type CityCardProps = {
   offer: OfferPreview;
@@ -24,12 +25,18 @@ const CityCard = ({
 }: CityCardProps): React.ReactElement => {
   const offerLink = generatePath(AppRoute.Offer, {id: offer.id});
   const ratingWidth = `${Math.round(offer.rating) * 20}%`;
+  const handleMouseEnter = useCallback(() => {
+    onActiveOfferChange?.(offer);
+  }, [offer, onActiveOfferChange]);
+  const handleMouseLeave = useCallback(() => {
+    onActiveOfferChange?.(null);
+  }, [onActiveOfferChange]);
 
   return (
     <article
       className={cardClassName}
-      onMouseEnter={() => onActiveOfferChange?.(offer)}
-      onMouseLeave={() => onActiveOfferChange?.(null)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {offer.isPremium && (
         <div className="place-card__mark">
@@ -53,15 +60,15 @@ const CityCard = ({
             <b className="place-card__price-value">&euro;{offer.price}</b>
             <span className="place-card__price-text">&#47;&nbsp;night</span>
           </div>
-          <button
-            className={`place-card__bookmark-button ${offer.isFavorite ? 'place-card__bookmark-button--active' : ''} button`}
-            type="button"
-          >
-            <svg className="place-card__bookmark-icon" width="18" height="19">
-              <use xlinkHref="#icon-bookmark"></use>
-            </svg>
-            <span className="visually-hidden">{offer.isFavorite ? 'In bookmarks' : 'To bookmarks'}</span>
-          </button>
+          <FavoriteButton
+            offerId={offer.id}
+            isFavorite={offer.isFavorite}
+            buttonClassName="place-card__bookmark-button"
+            activeButtonClassName="place-card__bookmark-button--active"
+            iconClassName="place-card__bookmark-icon"
+            iconWidth={18}
+            iconHeight={19}
+          />
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
@@ -78,4 +85,6 @@ const CityCard = ({
   );
 };
 
-export default CityCard;
+const MemoizedCityCard = memo(CityCard);
+
+export default MemoizedCityCard;
