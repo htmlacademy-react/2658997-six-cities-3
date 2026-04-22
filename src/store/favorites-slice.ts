@@ -64,6 +64,10 @@ const favoritesSlice = createSlice({
       .addCase(logout.fulfilled, (state) => {
         state.favorites = [];
         state.updatingOfferIds = [];
+      })
+      .addCase(logout.rejected, (state) => {
+        state.favorites = [];
+        state.updatingOfferIds = [];
       });
   },
 });

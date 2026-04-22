@@ -32,8 +32,13 @@ export const login = createAsyncThunk<{token: string; email: string}, {email: st
 export const logout = createAsyncThunk<void, undefined>(
   'user/logout',
   async () => {
-    await api.post(APIRoute.Logout);
-    dropToken();
+    try {
+      await api.post(APIRoute.Logout);
+    } catch {
+      // no-op: local session must be terminated even if server logout fails
+    } finally {
+      dropToken();
+    }
   }
 );
 

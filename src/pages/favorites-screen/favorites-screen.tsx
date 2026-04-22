@@ -36,7 +36,7 @@ const FavoritesScreen = (): React.ReactElement => {
   const isEmpty = favoritesCount === 0;
 
   return (
-    <>
+    <div className={`page${isEmpty ? ' page--favorites-empty' : ''}`}>
       <Helmet>
         <title>6 cities: favorites</title>
       </Helmet>
@@ -83,7 +83,7 @@ const FavoritesScreen = (): React.ReactElement => {
         </div>
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 

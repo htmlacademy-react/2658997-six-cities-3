@@ -60,6 +60,12 @@ const userSlice = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.authToken = null;
         state.email = null;
+      })
+      .addCase(logout.rejected, (state) => {
+        state.loading = false;
+        state.authorizationStatus = AuthorizationStatus.NoAuth;
+        state.authToken = null;
+        state.email = null;
       });
   },
 });

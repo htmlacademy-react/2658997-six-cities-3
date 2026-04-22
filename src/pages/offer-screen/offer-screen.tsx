@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import type { RootState, AppDispatch } from '../../store/index.ts';
 import { fetchOfferDetails, fetchComments } from '../../store/api-actions.ts';
 import Header from '../../components/header/header.tsx';
-import { Offer } from '../../types/offer.ts';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import OffersList from '../../components/offers-list/offers-list.tsx';
 import FavoriteButton from '../../components/favorite-button/favorite-button.tsx';
@@ -27,9 +26,12 @@ const OfferScreen = (): React.ReactElement => {
   const currentOfferDetails = useSelector((state: RootState) =>
     selectCurrentOfferDetails(state),
   );
-  const comments = useSelector((state: RootState) => selectSortedComments(state));
-  const commentsCount = useSelector((state: RootState) => selectCommentsCount(state));
-  const [activeOffer, setActiveOffer] = useState<Offer | null>(null);
+  const comments = useSelector((state: RootState) =>
+    selectSortedComments(state),
+  );
+  const commentsCount = useSelector((state: RootState) =>
+    selectCommentsCount(state),
+  );
 
   useEffect(() => {
     if (id) {
@@ -48,19 +50,12 @@ const OfferScreen = (): React.ReactElement => {
     return offers
       .filter(
         (offer) =>
-          offer.id !== id &&
-          offer.city.name === offerDetails.city.name,
+          offer.id !== id && offer.city.name === offerDetails.city.name,
       )
       .slice(0, 3);
   }, [offerDetails, offers, id]);
 
-  const mapOffers: Offer[] = offerDetails
-    ? [offerDetails, ...nearbyOffers]
-    : [];
-
-  const handleActiveOfferChange = useCallback((currentOffer: Offer | null) => {
-    setActiveOffer(currentOffer ?? offerDetails);
-  }, [offerDetails]);
+  const mapOffers = offerDetails ? [offerDetails, ...nearbyOffers] : [];
 
   if (!id) {
     return <NotFoundScreen />;
@@ -73,7 +68,7 @@ const OfferScreen = (): React.ReactElement => {
   const ratingWidth = `${Math.round(offerDetails.rating) * 20}%`;
 
   return (
-    <>
+    <div className="page">
       <Helmet>
         <title>6 cities: {offerDetails.title}</title>
       </Helmet>
@@ -182,7 +177,7 @@ const OfferScreen = (): React.ReactElement => {
           <Map
             city={offerDetails.city}
             offers={mapOffers}
-            selectedOffer={activeOffer ?? offerDetails}
+            selectedOffer={offerDetails}
             className="offer__map map"
           />
         </section>
@@ -196,12 +191,11 @@ const OfferScreen = (): React.ReactElement => {
               listClassName="near-places__list places__list"
               cardClassName="near-places__card place-card"
               imageWrapperClassName="near-places__image-wrapper place-card__image-wrapper"
-              onActiveOfferChange={handleActiveOfferChange}
             />
           </section>
         </div>
       </main>
-    </>
+    </div>
   );
 };
 
