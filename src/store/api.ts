@@ -54,6 +54,7 @@ api.interceptors.response.use(
 export const apiActions = {
   getOffers: () => api.get<OfferPreview[]>(APIRoute.Offers),
   getOfferDetails: (id: string) => api.get<OfferDetails>(`${APIRoute.Offers}/${id}`),
+  getNearbyOffers: (id: string) => api.get<OfferPreview[]>(`${APIRoute.Offers}/${id}/nearby`),
   getComments: (offerId: string) => api.get<Review[]>(`${APIRoute.Comments}/${offerId}`),
   getFavorites: () => api.get<OfferPreview[]>(APIRoute.Favorites),
   checkAuth: () => api.get<{token: string; email: string}>(APIRoute.Login),
@@ -64,4 +65,3 @@ export const apiActions = {
   toggleFavorite: (offerId: string, status: 0 | 1) =>
     api.post<OfferDetails>(`${APIRoute.Favorites}/${offerId}/${status}`),
 };
-

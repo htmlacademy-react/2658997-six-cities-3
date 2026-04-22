@@ -1,7 +1,12 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { CITIES } from '../const.ts';
 import type { OfferPreview, OfferDetails } from '../types/offer.ts';
-import { fetchOfferDetails, fetchOffers, toggleFavoriteStatus } from './api-actions.ts';
+import {
+  fetchNearbyOffers,
+  fetchOfferDetails,
+  fetchOffers,
+  toggleFavoriteStatus,
+} from './api-actions.ts';
 
 export type City = typeof CITIES[number];
 export type SortType =
@@ -17,6 +22,11 @@ export type OffersState = {
   loading: boolean;
   error: string | null;
   currentOfferDetails: OfferDetails | null;
+  currentOfferDetailsLoading: boolean;
+  currentOfferDetailsErrorStatus: number | null;
+  nearbyOffers: OfferPreview[];
+  nearbyOffersLoading: boolean;
+  nearbyOffersError: string | null;
 };
 
 const initialState: OffersState = {
@@ -26,6 +36,11 @@ const initialState: OffersState = {
   loading: false,
   error: null,
   currentOfferDetails: null,
+  currentOfferDetailsLoading: false,
+  currentOfferDetailsErrorStatus: null,
+  nearbyOffers: [],
+  nearbyOffersLoading: false,
+  nearbyOffersError: null,
 };
 
 const offersSlice = createSlice({
@@ -59,12 +74,42 @@ const offersSlice = createSlice({
       })
       .addCase(fetchOfferDetails.pending, (state) => {
         state.currentOfferDetails = null;
+        state.currentOfferDetailsLoading = true;
+        state.currentOfferDetailsErrorStatus = null;
+        state.nearbyOffers = [];
+        state.nearbyOffersLoading = false;
+        state.nearbyOffersError = null;
       })
       .addCase(fetchOfferDetails.fulfilled, (state, action) => {
+        state.currentOfferDetailsLoading = false;
         state.currentOfferDetails = action.payload;
+      })
+      .addCase(fetchOfferDetails.rejected, (state, action) => {
+        state.currentOfferDetailsLoading = false;
+        state.currentOfferDetails = null;
+        state.currentOfferDetailsErrorStatus = action.payload ?? null;
+      })
+      .addCase(fetchNearbyOffers.pending, (state) => {
+        state.nearbyOffersLoading = true;
+        state.nearbyOffersError = null;
+        state.nearbyOffers = [];
+      })
+      .addCase(fetchNearbyOffers.fulfilled, (state, action) => {
+        state.nearbyOffersLoading = false;
+        state.nearbyOffers = action.payload.slice(0, 3);
+      })
+      .addCase(fetchNearbyOffers.rejected, (state) => {
+        state.nearbyOffersLoading = false;
+        state.nearbyOffersError = 'Failed to load nearby offers';
       })
       .addCase(toggleFavoriteStatus.fulfilled, (state, action) => {
         state.offers = state.offers.map((offer) =>
+          offer.id === action.payload.id
+            ? { ...offer, isFavorite: action.payload.isFavorite }
+            : offer,
+        );
+
+        state.nearbyOffers = state.nearbyOffers.map((offer) =>
           offer.id === action.payload.id
             ? { ...offer, isFavorite: action.payload.isFavorite }
             : offer,
