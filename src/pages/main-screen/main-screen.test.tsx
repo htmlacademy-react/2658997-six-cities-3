@@ -41,11 +41,11 @@ describe('MainScreen', () => {
 
     const { store } = renderWithProviders(<MainScreen />);
 
-    expect(await screen.findByText('1 places to stay in Paris')).toBeInTheDocument();
+    expect(await screen.findByText('1 place to stay in Paris')).toBeInTheDocument();
 
     await user.click(screen.getByText('Amsterdam'));
 
-    expect(screen.getByText('1 places to stay in Amsterdam')).toBeInTheDocument();
+    expect(screen.getByText('1 place to stay in Amsterdam')).toBeInTheDocument();
     expect(screen.getByText('Amsterdam offer')).toBeInTheDocument();
     expect(store.getState().offers.city).toBe('Amsterdam');
   });

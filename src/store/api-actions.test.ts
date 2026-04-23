@@ -116,16 +116,15 @@ describe('Async actions', () => {
     expect(store.getState().comments.comments).toEqual(comments);
   });
 
-  it('addComment posts comment and reloads comments', async () => {
+  it('addComment posts comment and adds returned comment into store', async () => {
     const store = makeTestStore();
-    const comments = [makeFakeReview('1'), makeFakeReview('2')];
+    const newComment = makeFakeReview('3');
 
-    mockApi.onPost(`${APIRoute.Comments}/1`).reply(200, makeFakeReview('3'));
-    mockApi.onGet(`${APIRoute.Comments}/1`).reply(200, comments);
+    mockApi.onPost(`${APIRoute.Comments}/1`).reply(200, newComment);
 
     await store.dispatch(addComment({ offerId: '1', comment: 'New comment', rating: 5 }));
 
-    expect(store.getState().comments.comments).toEqual(comments);
+    expect(store.getState().comments.comments).toEqual([newComment]);
     expect(store.getState().comments.error).toBeNull();
   });
 });

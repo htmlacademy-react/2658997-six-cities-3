@@ -41,4 +41,24 @@ describe('commentsReducer', () => {
 
     expect(state.error).toBe('Failed to post comment');
   });
+
+  it('handles addComment.fulfilled', () => {
+    const existingReview = makeFakeReview('1');
+    const newReview = makeFakeReview('2');
+    const state = commentsReducer(
+      {
+        comments: [existingReview],
+        loading: false,
+        error: 'Failed to post comment',
+      },
+      addComment.fulfilled(newReview, '', {
+        offerId: '1',
+        comment: newReview.comment,
+        rating: newReview.rating,
+      }),
+    );
+
+    expect(state.comments).toEqual([newReview, existingReview]);
+    expect(state.error).toBeNull();
+  });
 });

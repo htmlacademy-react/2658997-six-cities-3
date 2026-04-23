@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MockAdapter from 'axios-mock-adapter';
 import ReviewForm from './review-form.tsx';
@@ -67,7 +67,7 @@ describe('ReviewForm', () => {
       },
     });
 
-    await user.click(screen.getByTitle('5'));
+    await user.click(screen.getByTitle('perfect'));
     await user.type(screen.getByPlaceholderText(/Tell how was your stay/i), reviewText);
 
     expect(screen.getByRole('button', { name: 'Submit' })).toBeEnabled();
@@ -78,5 +78,27 @@ describe('ReviewForm', () => {
       expect(screen.getByRole('button', { name: 'Submit' })).toBeDisabled();
     });
     expect(screen.getByPlaceholderText(/Tell how was your stay/i)).toHaveValue('');
+  });
+
+  it('keeps submit disabled when review is longer than allowed', async () => {
+    const user = userEvent.setup();
+
+    renderWithProviders(<ReviewForm offerId="1" />, {
+      preloadedState: {
+        user: {
+          authorizationStatus: AuthorizationStatus.Auth,
+          authToken: 'token',
+          email: 'test@test.com',
+          loading: false,
+        },
+      },
+    });
+
+    await user.click(screen.getByTitle('perfect'));
+    fireEvent.change(screen.getByPlaceholderText(/Tell how was your stay/i), {
+      target: { value: 'a'.repeat(301) },
+    });
+
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeDisabled();
   });
 });

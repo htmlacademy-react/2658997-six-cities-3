@@ -48,6 +48,27 @@ describe('favoritesReducer', () => {
     expect(fulfilledState.updatingOfferIds).toEqual([]);
   });
 
+  it('removes offer from favorites after favorite status is disabled', () => {
+    const startState = {
+      favorites: [favoriteOffer],
+      loading: false,
+      error: null,
+      updatingOfferIds: ['1'],
+    };
+
+    const state = favoritesReducer(
+      startState,
+      toggleFavoriteStatus.fulfilled(
+        { ...makeFakeOfferDetails('1'), isFavorite: false },
+        '',
+        { offerId: '1', status: 0 },
+      ),
+    );
+
+    expect(state.favorites).toEqual([]);
+    expect(state.updatingOfferIds).toEqual([]);
+  });
+
   it('clears favorites after auth failure actions', () => {
     const startState = {
       favorites: [favoriteOffer],
