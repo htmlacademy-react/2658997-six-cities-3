@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LocationsList from './locations-list.tsx';
 import { CITIES } from '../../const.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
+import { renderWithProviders } from '../../utils/index.ts';
 
 describe('LocationsList', () => {
   it('renders all cities and marks current one as active', () => {

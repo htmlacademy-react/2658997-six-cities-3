@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from './private-route.tsx';
 import { AuthorizationStatus } from '../../const.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
+import { renderWithProviders } from '../../utils/index.ts';
 
 describe('PrivateRoute', () => {
   it('renders spinner while auth status is loading', () => {

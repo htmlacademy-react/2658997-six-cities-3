@@ -5,8 +5,7 @@ import { Route, Routes } from 'react-router-dom';
 import FavoriteButton from './favorite-button.tsx';
 import { api, APIRoute } from '../../store/api.ts';
 import { AuthorizationStatus } from '../../const.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
-import { makeFakeOfferDetails, makeFakeOfferPreview } from '../../utils/mock-data.ts';
+import { makeFakeOfferDetails, makeFakeOfferPreview, renderWithProviders } from '../../utils/index.ts';
 
 const renderButton = (isFavorite = false) => (
   <FavoriteButton

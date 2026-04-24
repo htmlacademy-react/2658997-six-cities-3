@@ -4,8 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 import FavoritesScreen from './favorites-screen.tsx';
 import { api, APIRoute } from '../../store/api.ts';
 import { AuthorizationStatus } from '../../const.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
-import { makeFakeOfferPreview } from '../../utils/mock-data.ts';
+import { makeFakeOfferPreview, renderWithProviders } from '../../utils/index.ts';
 
 describe('FavoritesScreen', () => {
   let mockApi: MockAdapter;

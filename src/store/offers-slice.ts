@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { CITIES } from '../const.ts';
-import type { OfferPreview, OfferDetails } from '../types/offer.ts';
+import type { OfferDetails, OfferPreview } from '../types/index.ts';
 import {
   fetchNearbyOffers,
   fetchOfferDetails,

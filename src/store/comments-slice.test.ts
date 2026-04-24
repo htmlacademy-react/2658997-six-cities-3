@@ -1,6 +1,6 @@
 import { addComment, fetchComments } from './api-actions.ts';
 import { commentsReducer } from './comments-slice.ts';
-import { makeFakeReview } from '../utils/mock-data.ts';
+import { makeFakeReview } from '../utils/index.ts';
 
 describe('commentsReducer', () => {
   const review = makeFakeReview();

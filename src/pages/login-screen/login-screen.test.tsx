@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import LoginScreen from './login-screen.tsx';
 import { AuthorizationStatus, CITIES } from '../../const.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
+import { renderWithProviders } from '../../utils/index.ts';
 
 describe('LoginScreen', () => {
   it('shows validation error for password without a digit', async () => {

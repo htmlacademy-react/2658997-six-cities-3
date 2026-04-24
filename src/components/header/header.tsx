@@ -13,9 +13,14 @@ import {
 const Header = (): React.ReactElement => {
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
+
+  const isLoginPage = location.pathname === String(AppRoute.Login);
+
   const isAuth = useSelector((state: RootState) => selectIsAuthorized(state));
   const email = useSelector((state: RootState) => selectUserEmail(state));
-  const favoritesCount = useSelector((state: RootState) => selectFavoritesCount(state));
+  const favoritesCount = useSelector((state: RootState) =>
+    selectFavoritesCount(state),
+  );
 
   const handleLogout = useCallback(() => {
     if (isAuth) {
@@ -41,48 +46,54 @@ const Header = (): React.ReactElement => {
               />
             </Link>
           </div>
-          <nav className="header__nav">
-            <ul className="header__nav-list">
-              {isAuth ? (
-                <>
+          {!isLoginPage && (
+            <nav className="header__nav">
+              <ul className="header__nav-list">
+                {isAuth ? (
+                  <>
+                    <li className="header__nav-item user">
+                      <Link
+                        className="header__nav-link header__nav-link--profile"
+                        to={AppRoute.Favorites}
+                      >
+                        <div className="header__avatar-wrapper user__avatar-wrapper"></div>
+                        <span className="header__user-name user__name">
+                          {email}
+                        </span>
+                        <span className="header__favorite-count">
+                          {favoritesCount}
+                        </span>
+                      </Link>
+                    </li>
+                    <li className="header__nav-item">
+                      <button
+                        className="header__nav-link header__signout button"
+                        type="button"
+                        onClick={handleLogout}
+                      >
+                        Sign out
+                      </button>
+                    </li>
+                  </>
+                ) : (
                   <li className="header__nav-item user">
                     <Link
                       className="header__nav-link header__nav-link--profile"
-                      to={AppRoute.Favorites}
+                      to={AppRoute.Login}
+                      aria-current={
+                        location.pathname === String(AppRoute.Login)
+                          ? 'page'
+                          : undefined
+                      }
                     >
                       <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                      <span className="header__user-name user__name">
-                        {email}
-                      </span>
-                      <span className="header__favorite-count">
-                        {favoritesCount}
-                      </span>
+                      <span className="header__login">Sign in</span>
                     </Link>
                   </li>
-                  <li className="header__nav-item">
-                    <button
-                      className="header__nav-link header__signout button"
-                      type="button"
-                      onClick={handleLogout}
-                    >
-                      Sign out
-                    </button>
-                  </li>
-                </>
-              ) : (
-                <li className="header__nav-item user">
-                  <Link
-                    className="header__nav-link header__nav-link--profile"
-                    to={AppRoute.Login}
-                    aria-current={location.pathname === String(AppRoute.Login) ? 'page' : undefined}
-                  >
-                    <div className="header__avatar-wrapper user__avatar-wrapper"></div>
-                    <span className="header__login">Sign in</span>
-                  </Link>
-                </li>
-              )}
-            </ul>
-          </nav>
+                )}
+              </ul>
+            </nav>
+          )}
         </div>
       </div>
     </header>

@@ -1,7 +1,7 @@
 import { screen } from '@testing-library/react';
 import NotFoundScreen from './not-found-screen.tsx';
 import { AuthorizationStatus } from '../../const.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
+import { renderWithProviders } from '../../utils/index.ts';
 
 describe('NotFoundScreen', () => {
   it('renders 404 page content', () => {

@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from 'react';
 import {generatePath, Link} from 'react-router-dom';
 import {AppRoute} from '../../const.ts';
-import {OfferPreview} from '../../types/offer.ts';
+import type { OfferPreview } from '../../types/index.ts';
 import FavoriteButton from '../favorite-button/favorite-button.tsx';
 
 type CityCardProps = {

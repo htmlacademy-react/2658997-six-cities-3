@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import CityCard from '../city-card/city-card.tsx';
-import { OfferPreview } from '../../types/offer.ts';
+import type { OfferPreview } from '../../types/index.ts';
 
 type OffersListProps = {
   offers: OfferPreview[];

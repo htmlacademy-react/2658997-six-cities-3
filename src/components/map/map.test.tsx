@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { Marker, layerGroup } from 'leaflet';
 import Map from './map.tsx';
-import { makeFakeOfferPreview } from '../../utils/mock-data.ts';
+import { makeFakeOfferPreview } from '../../utils/index.ts';
 
 const mocks = vi.hoisted(() => ({
   addToLayer: vi.fn(),
@@ -11,7 +11,7 @@ const mocks = vi.hoisted(() => ({
   map: {},
 }));
 
-vi.mock('../../hooks/use-map.ts', () => ({
+vi.mock('../../hooks/index.ts', () => ({
   default: vi.fn(() => mocks.map),
 }));
 

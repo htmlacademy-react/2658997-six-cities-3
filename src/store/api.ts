@@ -1,6 +1,5 @@
 import axios, {AxiosInstance, AxiosError} from 'axios';
-import {OfferPreview, OfferDetails} from '../types/offer.ts';
-import {Review} from '../types/review.ts';
+import type { OfferDetails, OfferPreview, Review } from '../types/index.ts';
 
 const BASE_URL = 'https://15.design.htmlacademy.pro/six-cities';
 const TIMEOUT = 5000;

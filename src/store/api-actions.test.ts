@@ -9,8 +9,7 @@ import {
   fetchOffers,
   toggleFavoriteStatus,
 } from './api-actions.ts';
-import { makeFakeOfferDetails, makeFakeOfferPreview, makeFakeReview } from '../utils/mock-data.ts';
-import { makeTestStore } from '../utils/test-utils.tsx';
+import { makeFakeOfferDetails, makeFakeOfferPreview, makeFakeReview, makeTestStore } from '../utils/index.ts';
 
 describe('Async actions', () => {
   let mockApi: MockAdapter;

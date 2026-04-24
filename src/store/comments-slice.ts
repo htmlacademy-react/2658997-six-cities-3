@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { Review } from '../types/review.ts';
+import type { Review } from '../types/index.ts';
 import { addComment, fetchComments } from './api-actions.ts';
 
 export type CommentsState = {

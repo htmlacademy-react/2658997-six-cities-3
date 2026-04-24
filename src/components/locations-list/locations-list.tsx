@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import {CITIES} from '../../const.ts';
-import Location from '../../pages/main-screen/components/location.tsx';
+import { Location } from '../../pages/main-screen/components/index.ts';
 import type { City } from '../../store/offers-slice.ts';
 
 type LocationsListProps = {

@@ -2,8 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import CityCard from './city-card.tsx';
 import { AuthorizationStatus } from '../../const.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
-import { makeFakeOfferPreview } from '../../utils/mock-data.ts';
+import { makeFakeOfferPreview, renderWithProviders } from '../../utils/index.ts';
 
 describe('CityCard', () => {
   it('renders offer data and link to offer page', () => {

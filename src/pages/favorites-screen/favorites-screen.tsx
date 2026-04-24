@@ -17,7 +17,7 @@ import {
   selectFavoritesLoading,
   selectGroupedFavorites,
 } from '../../store/selectors.ts';
-import FavoritesEmptyState from './components/favorites-empty-state.tsx';
+import { FavoritesEmptyState } from './components/index.ts';
 import Spinner from '../../components/spinner/spinner.tsx';
 
 const FavoritesScreen = (): React.ReactElement => {
