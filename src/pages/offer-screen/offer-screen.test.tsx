@@ -5,8 +5,7 @@ import OfferScreen from './offer-screen.tsx';
 import NotFoundScreen from '../not-found-screen/not-found-screen.tsx';
 import { api, APIRoute } from '../../store/api.ts';
 import { AuthorizationStatus } from '../../const.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
-import { makeFakeOfferDetails, makeFakeOfferPreview, makeFakeReview } from '../../utils/mock-data.ts';
+import { makeFakeOfferDetails, makeFakeOfferPreview, makeFakeReview, renderWithProviders } from '../../utils/index.ts';
 
 vi.mock('../../components/map/map.tsx', () => ({
   default: () => <div data-testid="map" />,

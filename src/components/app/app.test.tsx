@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import { AppRoutes } from './app.tsx';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
+import { renderWithProviders } from '../../utils/index.ts';
 
 vi.mock('../../pages/main-screen/main-screen.tsx', () => ({
   default: () => <div>Main screen</div>,

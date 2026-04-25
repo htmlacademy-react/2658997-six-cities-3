@@ -15,13 +15,18 @@ import {
   selectUserLoading,
 } from '../../store/selectors.ts';
 
-const getRandomCity = (): City => CITIES[Math.floor(Math.random() * CITIES.length)];
+const getRandomCity = (): City =>
+  CITIES[Math.floor(Math.random() * CITIES.length)];
 
 const LoginScreen = (): React.ReactElement => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const isAuthorized = useSelector((state: RootState) => selectIsAuthorized(state));
-  const userLoading = useSelector((state: RootState) => selectUserLoading(state));
+  const isAuthorized = useSelector((state: RootState) =>
+    selectIsAuthorized(state),
+  );
+  const userLoading = useSelector((state: RootState) =>
+    selectUserLoading(state),
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [promoCity] = useState<City>(getRandomCity);
@@ -42,7 +47,9 @@ const LoginScreen = (): React.ReactElement => {
       }
 
       if (!/^(?=.*[A-Za-z])(?=.*\d).+$/.test(password)) {
-        setErrorMessage('Password must contain at least one letter and one digit.');
+        setErrorMessage(
+          'Password must contain at least one letter and one digit.',
+        );
         return;
       }
 

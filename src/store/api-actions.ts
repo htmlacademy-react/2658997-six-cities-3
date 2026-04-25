@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
-import {OfferPreview, OfferDetails} from '../types/offer.ts';
-import {Review} from '../types/review.ts';
+import type { OfferDetails, OfferPreview, Review } from '../types/index.ts';
 import {api, APIRoute, saveToken, dropToken} from './api.ts';
 
 export const fetchOffers = createAsyncThunk<OfferPreview[], undefined>(

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { OfferPreview } from '../types/offer.ts';
+import type { OfferPreview } from '../types/index.ts';
 import {
   checkAuth,
   fetchFavorites,

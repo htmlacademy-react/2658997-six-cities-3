@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import Footer from './footer.tsx';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
+import { renderWithProviders } from '../../utils/index.ts';
 
 describe('Footer', () => {
   it('renders logo link to main page', () => {

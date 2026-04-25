@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState, type RefObject} from 'react';
 import {Map as LeafletMap, tileLayer} from 'leaflet';
-import {type City} from '../types/offer.ts';
+import type { City } from '../types/index.ts';
 
 const useMap = (mapRef: RefObject<HTMLElement>, city: City): LeafletMap | null => {
   const [map, setMap] = useState<LeafletMap | null>(null);

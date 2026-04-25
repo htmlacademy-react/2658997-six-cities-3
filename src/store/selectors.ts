@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { AuthorizationStatus } from '../const.ts';
-import type { OfferPreview } from '../types/offer.ts';
+import type { OfferPreview } from '../types/index.ts';
 import type { RootState } from './index.ts';
 
 const sortOffers = (offers: OfferPreview[], sortType: RootState['offers']['sortType']) => {

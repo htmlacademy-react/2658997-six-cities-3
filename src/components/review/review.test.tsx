@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react';
 import Review from './review.tsx';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
-import { makeFakeReview } from '../../utils/mock-data.ts';
+import { makeFakeReview, renderWithProviders } from '../../utils/index.ts';
 
 describe('Review', () => {
   it('renders review data', () => {

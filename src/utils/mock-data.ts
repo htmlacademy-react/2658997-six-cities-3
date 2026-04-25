@@ -1,5 +1,4 @@
-import type { OfferDetails, OfferPreview } from '../types/offer.ts';
-import type { Review } from '../types/review.ts';
+import type { OfferDetails, OfferPreview, Review } from '../types/index.ts';
 
 export const makeFakeOfferPreview = (id = '1'): OfferPreview => ({
   id,

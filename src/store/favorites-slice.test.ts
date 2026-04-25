@@ -6,7 +6,7 @@ import {
   toggleFavoriteStatus,
 } from './api-actions.ts';
 import { favoritesReducer } from './favorites-slice.ts';
-import { makeFakeOfferDetails, makeFakeOfferPreview } from '../utils/mock-data.ts';
+import { makeFakeOfferDetails, makeFakeOfferPreview } from '../utils/index.ts';
 
 describe('favoritesReducer', () => {
   const favoriteOffer = makeFakeOfferPreview();

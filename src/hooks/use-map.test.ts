@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { Map as LeafletMap, tileLayer } from 'leaflet';
 import useMap from './use-map.ts';
-import type { City } from '../types/offer.ts';
+import type { City } from '../types/index.ts';
 
 const mocks = vi.hoisted(() => ({
   addTo: vi.fn(),

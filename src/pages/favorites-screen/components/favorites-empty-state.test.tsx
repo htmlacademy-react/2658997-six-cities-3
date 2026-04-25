@@ -1,6 +1,6 @@
 import { screen } from '@testing-library/react';
 import FavoritesEmptyState from './favorites-empty-state.tsx';
-import { renderWithProviders } from '../../../utils/test-utils.tsx';
+import { renderWithProviders } from '../../../utils/index.ts';
 
 describe('FavoritesEmptyState', () => {
   it('renders favorites empty text', () => {

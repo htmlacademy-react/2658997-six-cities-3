@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react';
 import OffersList from './offers-list.tsx';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
-import { makeFakeOfferPreview } from '../../utils/mock-data.ts';
+import { makeFakeOfferPreview, renderWithProviders } from '../../utils/index.ts';
 
 describe('OffersList', () => {
   it('renders one card for each offer', () => {

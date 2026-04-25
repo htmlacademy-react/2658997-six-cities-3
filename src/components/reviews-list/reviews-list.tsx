@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import Review from '../review/review.tsx';
-import { type Review as ReviewType } from '../../types/review.ts';
+import type { Review as ReviewType } from '../../types/index.ts';
 
 type ReviewsListProps = {
   reviews: ReviewType[];

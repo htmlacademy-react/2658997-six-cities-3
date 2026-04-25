@@ -4,7 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 import Header from './header.tsx';
 import { AuthorizationStatus } from '../../const.ts';
 import { api, APIRoute } from '../../store/api.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
+import { renderWithProviders } from '../../utils/index.ts';
 
 describe('Header', () => {
   let mockApi: MockAdapter;

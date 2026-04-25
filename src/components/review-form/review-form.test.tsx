@@ -4,8 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 import ReviewForm from './review-form.tsx';
 import { AuthorizationStatus } from '../../const.ts';
 import { api, APIRoute } from '../../store/api.ts';
-import { renderWithProviders } from '../../utils/test-utils.tsx';
-import { makeFakeReview } from '../../utils/mock-data.ts';
+import { makeFakeReview, renderWithProviders } from '../../utils/index.ts';
 
 describe('ReviewForm', () => {
   let mockApi: MockAdapter;

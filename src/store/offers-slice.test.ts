@@ -5,7 +5,7 @@ import {
   toggleFavoriteStatus,
 } from './api-actions.ts';
 import { changeCity, offersReducer, setSortType } from './offers-slice.ts';
-import { makeFakeOfferDetails, makeFakeOfferPreview } from '../utils/mock-data.ts';
+import { makeFakeOfferDetails, makeFakeOfferPreview } from '../utils/index.ts';
 
 describe('offersReducer', () => {
   const offerPreview = makeFakeOfferPreview();

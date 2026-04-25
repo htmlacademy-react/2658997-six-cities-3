@@ -13,8 +13,8 @@ import OffersList from '../../components/offers-list/offers-list.tsx';
 import Spinner from '../../components/spinner/spinner.tsx';
 import ErrorMessage from '../../components/error-message/error-message.tsx';
 import './main-screen.css';
-import { OfferPreview } from '../../types/offer.ts';
-import MainEmptyState from './components/main-empty-state.tsx';
+import type { OfferPreview } from '../../types/index.ts';
+import { MainEmptyState } from './components/index.ts';
 import {
   selectCity,
   selectCurrentCityData,
