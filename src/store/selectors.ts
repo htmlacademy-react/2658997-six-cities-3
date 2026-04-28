@@ -16,11 +16,6 @@ const sortOffers = (offers: OfferPreview[], sortType: RootState['offers']['sortT
   }
 };
 
-export const selectOffersState = (state: RootState) => state.offers;
-export const selectUserState = (state: RootState) => state.user;
-export const selectCommentsState = (state: RootState) => state.comments;
-export const selectFavoritesState = (state: RootState) => state.favorites;
-
 export const selectCity = (state: RootState) => state.offers.city;
 export const selectOffers = (state: RootState) => state.offers.offers;
 export const selectSortType = (state: RootState) => state.offers.sortType;

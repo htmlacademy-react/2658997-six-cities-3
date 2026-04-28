@@ -1,5 +1,4 @@
 import axios, {AxiosInstance, AxiosError} from 'axios';
-import type { OfferDetails, OfferPreview, Review } from '../types/index.ts';
 
 const BASE_URL = 'https://15.design.htmlacademy.pro/six-cities';
 const TIMEOUT = 5000;
@@ -49,18 +48,3 @@ api.interceptors.response.use(
     throw error;
   }
 );
-
-export const apiActions = {
-  getOffers: () => api.get<OfferPreview[]>(APIRoute.Offers),
-  getOfferDetails: (id: string) => api.get<OfferDetails>(`${APIRoute.Offers}/${id}`),
-  getNearbyOffers: (id: string) => api.get<OfferPreview[]>(`${APIRoute.Offers}/${id}/nearby`),
-  getComments: (offerId: string) => api.get<Review[]>(`${APIRoute.Comments}/${offerId}`),
-  getFavorites: () => api.get<OfferPreview[]>(APIRoute.Favorites),
-  checkAuth: () => api.get<{token: string; email: string}>(APIRoute.Login),
-  login: (email: string, password: string) => api.post<{token: string; email: string}>(APIRoute.Login, {email, password}),
-  logout: () => api.post(APIRoute.Logout),
-  addComment: (offerId: string, comment: {comment: string; rating: number}) =>
-    api.post<Review>(`${APIRoute.Comments}/${offerId}`, comment),
-  toggleFavorite: (offerId: string, status: 0 | 1) =>
-    api.post<OfferDetails>(`${APIRoute.Favorites}/${offerId}/${status}`),
-};

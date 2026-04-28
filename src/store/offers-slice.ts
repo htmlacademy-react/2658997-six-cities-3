@@ -50,10 +50,6 @@ const offersSlice = createSlice({
     changeCity: (state, action: PayloadAction<City>) => {
       state.city = action.payload;
     },
-    setOffers: (state, action: PayloadAction<OfferPreview[]>) => {
-      state.offers = action.payload;
-      state.loading = false;
-    },
     setSortType: (state, action: PayloadAction<SortType>) => {
       state.sortType = action.payload;
     },
@@ -125,5 +121,5 @@ const offersSlice = createSlice({
   },
 });
 
-export const { changeCity, setOffers, setSortType } = offersSlice.actions;
+export const { changeCity, setSortType } = offersSlice.actions;
 export const offersReducer = offersSlice.reducer;
