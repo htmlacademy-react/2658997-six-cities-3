@@ -29,6 +29,8 @@ export type OffersState = {
   nearbyOffersError: string | null;
 };
 
+const NEARBY_OFFERS_LIMIT = 3;
+
 const initialState: OffersState = {
   city: 'Paris',
   offers: [],
@@ -92,7 +94,7 @@ const offersSlice = createSlice({
       })
       .addCase(fetchNearbyOffers.fulfilled, (state, action) => {
         state.nearbyOffersLoading = false;
-        state.nearbyOffers = action.payload.slice(0, 3);
+        state.nearbyOffers = action.payload.slice(0, NEARBY_OFFERS_LIMIT);
       })
       .addCase(fetchNearbyOffers.rejected, (state) => {
         state.nearbyOffersLoading = false;

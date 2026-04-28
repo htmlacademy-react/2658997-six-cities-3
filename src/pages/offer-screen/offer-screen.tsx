@@ -33,6 +33,12 @@ const OFFER_TYPE_LABELS: Record<string, string> = {
   house: 'House',
   hotel: 'Hotel',
 };
+const NOT_FOUND_ERROR_STATUS = 404;
+const RATING_PERCENT_MULTIPLIER = 20;
+const OFFER_IMAGES_LIMIT = 6;
+const FAVORITE_BUTTON_ICON_WIDTH = 31;
+const FAVORITE_BUTTON_ICON_HEIGHT = 33;
+const HOST_AVATAR_SIZE = 74;
 
 const OfferScreen = (): React.ReactElement => {
   const { id } = useParams();
@@ -73,7 +79,7 @@ const OfferScreen = (): React.ReactElement => {
     return <Navigate to={AppRoute.NotFound} replace />;
   }
 
-  if (currentOfferDetailsErrorStatus === 404) {
+  if (currentOfferDetailsErrorStatus === NOT_FOUND_ERROR_STATUS) {
     return <Navigate to={AppRoute.NotFound} replace />;
   }
 
@@ -94,7 +100,7 @@ const OfferScreen = (): React.ReactElement => {
     );
   }
 
-  const ratingWidth = `${Math.round(offerDetails.rating) * 20}%`;
+  const ratingWidth = `${Math.round(offerDetails.rating) * RATING_PERCENT_MULTIPLIER}%`;
   const offerTypeLabel = OFFER_TYPE_LABELS[offerDetails.type] ?? offerDetails.type;
 
   return (
@@ -107,7 +113,7 @@ const OfferScreen = (): React.ReactElement => {
         <section className="offer">
           <div className="offer__gallery-container container">
             <div className="offer__gallery">
-              {offerDetails.images.slice(0, 6).map((image) => (
+              {offerDetails.images.slice(0, OFFER_IMAGES_LIMIT).map((image) => (
                 <div className="offer__image-wrapper" key={image}>
                   <img
                     className="offer__image"
@@ -136,8 +142,8 @@ const OfferScreen = (): React.ReactElement => {
                   buttonClassName="offer__bookmark-button"
                   activeButtonClassName="offer__bookmark-button--active"
                   iconClassName="offer__bookmark-icon"
-                  iconWidth={31}
-                  iconHeight={33}
+                  iconWidth={FAVORITE_BUTTON_ICON_WIDTH}
+                  iconHeight={FAVORITE_BUTTON_ICON_HEIGHT}
                 />
               </div>
               <div className="offer__rating rating">
@@ -185,8 +191,8 @@ const OfferScreen = (): React.ReactElement => {
                     <img
                       className="offer__avatar user__avatar"
                       src={offerDetails.host.avatarUrl}
-                      width="74"
-                      height="74"
+                      width={HOST_AVATAR_SIZE}
+                      height={HOST_AVATAR_SIZE}
                       alt="Host avatar"
                     />
                   </div>
