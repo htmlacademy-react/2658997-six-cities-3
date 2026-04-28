@@ -4,6 +4,8 @@ import {AppRoute} from '../../const.ts';
 import type { OfferPreview } from '../../types/index.ts';
 import FavoriteButton from '../favorite-button/favorite-button.tsx';
 
+const RATING_PERCENT_MULTIPLIER = 20;
+
 type CityCardProps = {
   offer: OfferPreview;
   cardClassName?: string;
@@ -24,7 +26,7 @@ const CityCard = ({
   onActiveOfferChange
 }: CityCardProps): React.ReactElement => {
   const offerLink = generatePath(AppRoute.Offer, {id: offer.id});
-  const ratingWidth = `${Math.round(offer.rating) * 20}%`;
+  const ratingWidth = `${Math.round(offer.rating) * RATING_PERCENT_MULTIPLIER}%`;
   const handleMouseEnter = useCallback(() => {
     onActiveOfferChange?.(offer);
   }, [offer, onActiveOfferChange]);

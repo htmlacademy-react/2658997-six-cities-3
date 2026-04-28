@@ -5,9 +5,16 @@ import type { RootState, AppDispatch } from '../../store/index.ts';
 import { addComment } from '../../store/api-actions.ts';
 import { AppRoute, AuthorizationStatus } from '../../const.ts';
 import ErrorMessage from '../error-message/error-message.tsx';
+import { selectAuthorizationStatus } from '../../store/selectors.ts';
 
 const MIN_REVIEW_LENGTH = 50;
 const MAX_REVIEW_LENGTH = 300;
+const MIN_RATING_VALUE = 1;
+const MAX_RATING_VALUE = 5;
+const UNSELECTED_RATING = 0;
+const RATING_VALUES = [5, 4, 3, 2, 1] as const;
+const RATING_ICON_WIDTH = 37;
+const RATING_ICON_HEIGHT = 33;
 const RATING_TITLES: Record<number, string> = {
   5: 'perfect',
   4: 'good',
@@ -24,9 +31,9 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const authorizationStatus = useSelector(
-    (state: RootState) => state.user.authorizationStatus,
+    (state: RootState) => selectAuthorizationStatus(state),
   );
-  const [rating, setRating] = useState<number>(0);
+  const [rating, setRating] = useState<number>(UNSELECTED_RATING);
   const [review, setReview] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -52,7 +59,8 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
     if (
       review.length < MIN_REVIEW_LENGTH ||
       review.length > MAX_REVIEW_LENGTH ||
-      rating === 0
+      rating < MIN_RATING_VALUE ||
+      rating > MAX_RATING_VALUE
     ) {
       return;
     }
@@ -63,7 +71,7 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
       .unwrap()
       .then(() => {
         setReview('');
-        setRating(0);
+        setRating(UNSELECTED_RATING);
         setIsSubmitting(false);
       })
       .catch(() => {
@@ -74,7 +82,8 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
 
   const isSubmitDisabled =
     isSubmitting ||
-    rating === 0 ||
+    rating < MIN_RATING_VALUE ||
+    rating > MAX_RATING_VALUE ||
     review.length < MIN_REVIEW_LENGTH ||
     review.length > MAX_REVIEW_LENGTH;
 
@@ -94,7 +103,7 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
       </label>
       {submitError && <ErrorMessage message={submitError} />}
       <div className="reviews__rating-form form__rating">
-        {[5, 4, 3, 2, 1].map((value) => (
+        {RATING_VALUES.map((value) => (
           <React.Fragment key={value}>
             <input
               className="form__rating-input visually-hidden"
@@ -111,7 +120,7 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
               className="reviews__rating-label form__rating-label"
               title={RATING_TITLES[value]}
             >
-              <svg className="form__star-image" width="37" height="33">
+              <svg className="form__star-image" width={RATING_ICON_WIDTH} height={RATING_ICON_HEIGHT}>
                 <use xlinkHref="#icon-star"></use>
               </svg>
             </label>

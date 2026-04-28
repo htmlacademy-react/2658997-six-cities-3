@@ -29,6 +29,8 @@ export type OffersState = {
   nearbyOffersError: string | null;
 };
 
+const NEARBY_OFFERS_LIMIT = 3;
+
 const initialState: OffersState = {
   city: 'Paris',
   offers: [],
@@ -49,10 +51,6 @@ const offersSlice = createSlice({
   reducers: {
     changeCity: (state, action: PayloadAction<City>) => {
       state.city = action.payload;
-    },
-    setOffers: (state, action: PayloadAction<OfferPreview[]>) => {
-      state.offers = action.payload;
-      state.loading = false;
     },
     setSortType: (state, action: PayloadAction<SortType>) => {
       state.sortType = action.payload;
@@ -96,7 +94,7 @@ const offersSlice = createSlice({
       })
       .addCase(fetchNearbyOffers.fulfilled, (state, action) => {
         state.nearbyOffersLoading = false;
-        state.nearbyOffers = action.payload.slice(0, 3);
+        state.nearbyOffers = action.payload.slice(0, NEARBY_OFFERS_LIMIT);
       })
       .addCase(fetchNearbyOffers.rejected, (state) => {
         state.nearbyOffersLoading = false;
@@ -125,5 +123,5 @@ const offersSlice = createSlice({
   },
 });
 
-export const { changeCity, setOffers, setSortType } = offersSlice.actions;
+export const { changeCity, setSortType } = offersSlice.actions;
 export const offersReducer = offersSlice.reducer;

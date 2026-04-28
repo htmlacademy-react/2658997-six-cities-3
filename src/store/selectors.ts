@@ -3,6 +3,8 @@ import { AuthorizationStatus } from '../const.ts';
 import type { OfferPreview } from '../types/index.ts';
 import type { RootState } from './index.ts';
 
+const MAX_COMMENTS_COUNT = 10;
+
 const sortOffers = (offers: OfferPreview[], sortType: RootState['offers']['sortType']) => {
   switch (sortType) {
     case 'PriceLowToHigh':
@@ -15,11 +17,6 @@ const sortOffers = (offers: OfferPreview[], sortType: RootState['offers']['sortT
       return offers;
   }
 };
-
-export const selectOffersState = (state: RootState) => state.offers;
-export const selectUserState = (state: RootState) => state.user;
-export const selectCommentsState = (state: RootState) => state.comments;
-export const selectFavoritesState = (state: RootState) => state.favorites;
 
 export const selectCity = (state: RootState) => state.offers.city;
 export const selectOffers = (state: RootState) => state.offers.offers;
@@ -43,6 +40,7 @@ export const selectIsAuthorized = createSelector(
 );
 
 export const selectComments = (state: RootState) => state.comments.comments;
+export const selectCommentsError = (state: RootState) => state.comments.error;
 export const selectCommentsCount = createSelector(
   [selectComments],
   (comments) => comments.length,
@@ -50,7 +48,7 @@ export const selectCommentsCount = createSelector(
 export const selectSortedComments = createSelector([selectComments], (comments) =>
   [...comments]
     .sort((firstComment, secondComment) => new Date(secondComment.date).getTime() - new Date(firstComment.date).getTime())
-    .slice(0, 10),
+    .slice(0, MAX_COMMENTS_COUNT),
 );
 
 export const selectCurrentCityOffers = createSelector(

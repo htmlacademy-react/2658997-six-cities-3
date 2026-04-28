@@ -3,7 +3,36 @@ import { AxiosError } from 'axios';
 import type { OfferDetails, OfferPreview, Review } from '../types/index.ts';
 import {api, APIRoute, saveToken, dropToken} from './api.ts';
 
-export const fetchOffers = createAsyncThunk<OfferPreview[], undefined>(
+type AuthData = {
+  token: string;
+  email: string;
+};
+
+type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+type FetchOfferDetailsThunkConfig = {
+  rejectValue: number | null;
+};
+
+type FavoriteStatus = 0 | 1;
+
+type ToggleFavoriteStatusPayload = {
+  offerId: string;
+  status: FavoriteStatus;
+};
+
+type AddCommentPayload = {
+  offerId: string;
+  comment: string;
+  rating: number;
+};
+
+const FAVORITE_ENABLED_STATUS: FavoriteStatus = 1;
+
+export const fetchOffers = createAsyncThunk<OfferPreview[], void>(
   'offers/fetchOffers',
   async () => {
     const response = await api.get<OfferPreview[]>(APIRoute.Offers);
@@ -11,25 +40,25 @@ export const fetchOffers = createAsyncThunk<OfferPreview[], undefined>(
   }
 );
 
-export const checkAuth = createAsyncThunk<{token: string; email: string}, undefined>(
+export const checkAuth = createAsyncThunk<AuthData, void>(
   'user/checkAuth',
   async () => {
-    const response = await api.get<{token: string; email: string}>(APIRoute.Login);
+    const response = await api.get<AuthData>(APIRoute.Login);
     saveToken(response.data.token);
     return response.data;
   }
 );
 
-export const login = createAsyncThunk<{token: string; email: string}, {email: string; password: string}>(
+export const login = createAsyncThunk<AuthData, LoginPayload>(
   'user/login',
   async ({email, password}) => {
-    const response = await api.post<{token: string; email: string}>(APIRoute.Login, {email, password});
+    const response = await api.post<AuthData>(APIRoute.Login, {email, password});
     saveToken(response.data.token);
     return response.data;
   }
 );
 
-export const logout = createAsyncThunk<void, undefined>(
+export const logout = createAsyncThunk<void, void>(
   'user/logout',
   async () => {
     try {
@@ -45,7 +74,7 @@ export const logout = createAsyncThunk<void, undefined>(
 export const fetchOfferDetails = createAsyncThunk<
   OfferDetails,
   string,
-  { rejectValue: number | null }
+  FetchOfferDetailsThunkConfig
 >(
   'offers/fetchOfferDetails',
   async (offerId, { rejectWithValue }) => {
@@ -69,7 +98,7 @@ export const fetchNearbyOffers = createAsyncThunk<OfferPreview[], string>(
   }
 );
 
-export const fetchFavorites = createAsyncThunk<OfferPreview[], undefined>(
+export const fetchFavorites = createAsyncThunk<OfferPreview[], void>(
   'favorites/fetchFavorites',
   async () => {
     const response = await api.get<OfferPreview[]>(APIRoute.Favorites);
@@ -79,13 +108,13 @@ export const fetchFavorites = createAsyncThunk<OfferPreview[], undefined>(
 
 export const toggleFavoriteStatus = createAsyncThunk<
   OfferDetails,
-  {offerId: string; status: 0 | 1}
+  ToggleFavoriteStatusPayload
 >(
   'favorites/toggleFavoriteStatus',
   async ({offerId, status}, {dispatch}) => {
     const response = await api.post<OfferDetails>(`${APIRoute.Favorites}/${offerId}/${status}`);
 
-    if (status === 1) {
+    if (status === FAVORITE_ENABLED_STATUS) {
       await dispatch(fetchFavorites());
     }
 
@@ -101,7 +130,7 @@ export const fetchComments = createAsyncThunk<Review[], string>(
   }
 );
 
-export const addComment = createAsyncThunk<Review, {offerId: string; comment: string; rating: number}>(
+export const addComment = createAsyncThunk<Review, AddCommentPayload>(
   'comments/addComment',
   async ({offerId, comment, rating}) => {
     const response = await api.post<Review>(`${APIRoute.Comments}/${offerId}`, {comment, rating});
