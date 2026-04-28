@@ -5,6 +5,7 @@ import type { RootState, AppDispatch } from '../../store/index.ts';
 import { addComment } from '../../store/api-actions.ts';
 import { AppRoute, AuthorizationStatus } from '../../const.ts';
 import ErrorMessage from '../error-message/error-message.tsx';
+import { selectAuthorizationStatus } from '../../store/selectors.ts';
 
 const MIN_REVIEW_LENGTH = 50;
 const MAX_REVIEW_LENGTH = 300;
@@ -30,7 +31,7 @@ const ReviewForm = ({ offerId }: ReviewFormProps): React.ReactElement => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const authorizationStatus = useSelector(
-    (state: RootState) => state.user.authorizationStatus,
+    (state: RootState) => selectAuthorizationStatus(state),
   );
   const [rating, setRating] = useState<number>(UNSELECTED_RATING);
   const [review, setReview] = useState<string>('');

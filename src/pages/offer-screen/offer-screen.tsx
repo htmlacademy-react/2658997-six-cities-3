@@ -18,6 +18,7 @@ import Map from '../../components/map/map.tsx';
 import Spinner from '../../components/spinner/spinner.tsx';
 import ErrorMessage from '../../components/error-message/error-message.tsx';
 import {
+  selectCommentsError,
   selectCommentsCount,
   selectCurrentOfferDetails,
   selectCurrentOfferDetailsErrorStatus,
@@ -62,7 +63,9 @@ const OfferScreen = (): React.ReactElement => {
   const commentsCount = useSelector((state: RootState) =>
     selectCommentsCount(state),
   );
-  const commentsError = useSelector((state: RootState) => state.comments.error);
+  const commentsError = useSelector((state: RootState) =>
+    selectCommentsError(state),
+  );
 
   useEffect(() => {
     if (id) {

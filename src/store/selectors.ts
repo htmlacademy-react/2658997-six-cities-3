@@ -40,6 +40,7 @@ export const selectIsAuthorized = createSelector(
 );
 
 export const selectComments = (state: RootState) => state.comments.comments;
+export const selectCommentsError = (state: RootState) => state.comments.error;
 export const selectCommentsCount = createSelector(
   [selectComments],
   (comments) => comments.length,
